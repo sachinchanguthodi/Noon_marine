@@ -63,8 +63,8 @@ const config: Config = {
         sm: 'calc(var(--radius) - 4px)',
       },
       fontFamily: {
-        sans: ['var(--font-noto-sans-display)', 'sans-serif'],
-        heading: ['var(--font-outfit)', 'sans-serif'],
+        sans: ['var(--font-noto-sans-display)', 'ui-sans-serif', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Arial', 'sans-serif'],
+        heading: ['var(--font-outfit)', 'ui-sans-serif', 'system-ui', 'sans-serif'],
       },
     },
   },
