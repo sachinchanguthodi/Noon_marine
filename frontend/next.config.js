@@ -13,7 +13,7 @@ const nextConfig = {
       },
       {
         protocol: 'https',
-        hostname: 'rahnamaholding.com',
+        hostname: 'noonmarine.com',
       },
     ],
   },

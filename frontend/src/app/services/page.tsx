@@ -219,7 +219,7 @@ export default function ServicesPage() {
                 </div>
                 <div className="flex items-center">
                   <Mail className="h-6 w-6 mr-3" />
-                  <span className="text-lg">info@rahnamaholding.com</span>
+                  <span className="text-lg">info@noonmarine.com</span>
                 </div>
                 <div className="flex items-center">
                   <Building2 className="h-6 w-6 mr-3" />

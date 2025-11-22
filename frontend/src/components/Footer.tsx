@@ -46,7 +46,7 @@ export default function Footer() {
             <ul className="space-y-2 text-sm">
               <li>Dubai Maritime City, UAE</li>
               <li>Phone: +971 50 100 1882</li>
-              <li>Email: info@rahnamaholding.com</li>
+              <li>Email: info@noonmarine.com</li>
             </ul>
           </div>
         </div>

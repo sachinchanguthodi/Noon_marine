@@ -5,13 +5,13 @@ const options = {
   definition: {
     openapi: '3.0.0',
     info: {
-      title: 'Rahnama Marine Services API',
+      title: 'Noon Marine Services API',
       version: '1.0.0',
       description: 'Comprehensive API for marine business operations',
       contact: {
-        name: 'Rahnama Holding',
-        email: 'info@rahnamaholding.com',
-        url: 'https://www.rahnamaholding.com',
+        name: 'Noon Marine',
+        email: 'info@noonmarine.com',
+        url: 'https://noon-marine.vercel.app',
       },
     },
     servers: [

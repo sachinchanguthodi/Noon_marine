@@ -1,7 +1,7 @@
 {
-  "name": "rahnama-marine-frontend",
+  "name": "noon-marine-frontend",
   "version": "1.0.0",
-  "description": "Frontend for Rahnama Holding Marine Services Platform",
+  "description": "Frontend for Noon Marine Services Platform",
   "private": true,
   "scripts": {
     "dev": "next dev",

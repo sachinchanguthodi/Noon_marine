@@ -1,7 +1,7 @@
 {
-  "name": "rahnama-marine-backend",
+  "name": "noon-marine-backend",
   "version": "1.0.0",
-  "description": "Backend API for Rahnama Holding Marine Services Platform",
+  "description": "Backend API for Noon Marine Services Platform",
   "main": "dist/index.js",
   "scripts": {
     "dev": "nodemon src/index.ts",
@@ -13,7 +13,7 @@
     "test": "jest"
   },
   "keywords": ["marine", "maritime", "api", "vessel"],
-  "author": "Rahnama Holding",
+  "author": "Noon Marine",
   "license": "PROPRIETARY",
   "prisma": {
     "seed": "ts-node prisma/seed.ts"
