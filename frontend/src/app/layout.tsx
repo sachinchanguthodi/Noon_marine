@@ -1,6 +1,5 @@
 import type { Metadata } from 'next';
-import { Outfit } from 'next/font/google';
-import localFont from 'next/font/local';
+import { Outfit, Inter } from 'next/font/google';
 import './globals.css';
 
 const outfit = Outfit({
@@ -9,25 +8,9 @@ const outfit = Outfit({
   display: 'swap',
 });
 
-const geistSans = localFont({
-  src: [
-    {
-      path: '../../node_modules/geist/dist/fonts/geist-sans/Geist-Regular.woff2',
-      weight: '400',
-      style: 'normal',
-    },
-    {
-      path: '../../node_modules/geist/dist/fonts/geist-sans/Geist-Medium.woff2',
-      weight: '500',
-      style: 'normal',
-    },
-    {
-      path: '../../node_modules/geist/dist/fonts/geist-sans/Geist-Bold.woff2',
-      weight: '700',
-      style: 'normal',
-    },
-  ],
-  variable: '--font-geist-sans',
+const inter = Inter({
+  subsets: ['latin'],
+  variable: '--font-inter',
   display: 'swap',
 });
 
@@ -44,7 +27,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${outfit.variable} font-sans antialiased`}>
+      <body className={`${inter.variable} ${outfit.variable} font-sans antialiased`}>
         {children}
       </body>
     </html>
