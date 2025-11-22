@@ -1,0 +1,999 @@
+// Prisma Schema for Rahnama Marine Services Platform
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+// ============================================
+// USERS & AUTHENTICATION
+// ============================================
+
+enum UserRole {
+  SUPER_ADMIN
+  ADMIN
+  MANAGER
+  STAFF
+  CUSTOMER
+  DEALER
+  GUEST
+}
+
+enum UserStatus {
+  ACTIVE
+  INACTIVE
+  SUSPENDED
+  PENDING
+}
+
+model User {
+  id            String      @id @default(uuid())
+  email         String      @unique
+  password      String
+  firstName     String
+  lastName      String
+  phone         String?
+  role          UserRole    @default(CUSTOMER)
+  status        UserStatus  @default(PENDING)
+  avatar        String?
+  emailVerified Boolean     @default(false)
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  lastLogin     DateTime?
+
+  // Relations
+  customer      Customer?
+  dealer        Dealer?
+  activities    UserActivity[]
+  notifications Notification[]
+  messages      Message[]
+  supportTickets SupportTicket[]
+
+  @@index([email])
+  @@index([role])
+  @@map("users")
+}
+
+model UserActivity {
+  id          String   @id @default(uuid())
+  userId      String
+  action      String
+  description String?
+  ipAddress   String?
+  userAgent   String?
+  createdAt   DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([createdAt])
+  @@map("user_activities")
+}
+
+// ============================================
+// CUSTOMERS
+// ============================================
+
+enum CustomerType {
+  INDIVIDUAL
+  COMPANY
+  GOVERNMENT
+}
+
+model Customer {
+  id             String       @id @default(uuid())
+  userId         String       @unique
+  customerType   CustomerType @default(INDIVIDUAL)
+  companyName    String?
+  tradeLicense   String?
+  taxId          String?
+  address        String?
+  city           String?
+  country        String?
+  postalCode     String?
+  creditLimit    Float        @default(0)
+  currentBalance Float        @default(0)
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  // Relations
+  user            User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  vessels         CustomerVessel[]
+  documents       Document[]
+  orders          Order[]
+  bookings        Booking[]
+  serviceRequests ServiceRequest[]
+  invoices        Invoice[]
+  payments        Payment[]
+
+  @@index([userId])
+  @@index([companyName])
+  @@map("customers")
+}
+
+// ============================================
+// DEALERS
+// ============================================
+
+enum DealerStatus {
+  ACTIVE
+  INACTIVE
+  SUSPENDED
+}
+
+model Dealer {
+  id              String        @id @default(uuid())
+  userId          String        @unique
+  companyName     String
+  tradeLicense    String
+  territory       String?
+  commissionRate  Float         @default(0)
+  status          DealerStatus  @default(ACTIVE)
+  contractStart   DateTime
+  contractEnd     DateTime?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  // Relations
+  user        User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  leads       Lead[]
+  commissions Commission[]
+
+  @@index([userId])
+  @@index([status])
+  @@map("dealers")
+}
+
+model Lead {
+  id          String   @id @default(uuid())
+  dealerId    String
+  customerName String
+  email       String
+  phone       String?
+  service     String
+  status      String   @default("NEW")
+  notes       String?
+  assignedTo  String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  dealer Dealer @relation(fields: [dealerId], references: [id], onDelete: Cascade)
+
+  @@index([dealerId])
+  @@index([status])
+  @@map("leads")
+}
+
+model Commission {
+  id            String   @id @default(uuid())
+  dealerId      String
+  orderId       String?
+  amount        Float
+  rate          Float
+  status        String   @default("PENDING")
+  paidAt        DateTime?
+  createdAt     DateTime @default(now())
+
+  dealer Dealer @relation(fields: [dealerId], references: [id], onDelete: Cascade)
+
+  @@index([dealerId])
+  @@index([status])
+  @@map("commissions")
+}
+
+// ============================================
+// VESSELS
+// ============================================
+
+enum VesselType {
+  YACHT
+  CARGO
+  SUPPLY
+  TANKER
+  FISHING
+  PASSENGER
+  TUGBOAT
+  OTHER
+}
+
+enum VesselStatus {
+  AVAILABLE
+  SOLD
+  CHARTERED
+  UNDER_MAINTENANCE
+  DECOMMISSIONED
+}
+
+model Vessel {
+  id              String        @id @default(uuid())
+  name            String
+  imoNumber       String?       @unique
+  mmsiNumber      String?
+  vesselType      VesselType
+  flag            String?
+  yearBuilt       Int?
+  length          Float?
+  beam            Float?
+  draft           Float?
+  grossTonnage    Float?
+  netTonnage      Float?
+  engineType      String?
+  horsepower      Float?
+  fuelCapacity    Float?
+  speed           Float?
+  capacity        Int?
+  classification  String?
+  status          VesselStatus  @default(AVAILABLE)
+  price           Float?
+  charterRate     Float?
+  description     String?
+  specifications  Json?
+  images          String[]
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  // Relations
+  customers       CustomerVessel[]
+  documents       VesselDocument[]
+  certifications  VesselCertification[]
+  surveys         Survey[]
+  maintenanceRecords MaintenanceRecord[]
+  flagRegistrations FlagRegistration[]
+  insurancePolicies InsurancePolicy[]
+  crewAssignments CrewAssignment[]
+
+  @@index([imoNumber])
+  @@index([vesselType])
+  @@index([status])
+  @@map("vessels")
+}
+
+model CustomerVessel {
+  id         String   @id @default(uuid())
+  customerId String
+  vesselId   String
+  role       String   @default("OWNER")
+  startDate  DateTime @default(now())
+  endDate    DateTime?
+  createdAt  DateTime @default(now())
+
+  customer Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  vessel   Vessel   @relation(fields: [vesselId], references: [id], onDelete: Cascade)
+
+  @@unique([customerId, vesselId])
+  @@index([customerId])
+  @@index([vesselId])
+  @@map("customer_vessels")
+}
+
+// ============================================
+// SERVICES
+// ============================================
+
+enum ServiceCategory {
+  VESSEL_SALES
+  CHARTERING
+  INSURANCE
+  CLASSIFICATION
+  FLAG_REGISTRATION
+  VESSEL_MANAGEMENT
+  REPAIR_DOCKING
+  SPARE_PARTS
+  LOGISTICS
+  OFFSHORE_SUPPORT
+  LEGAL
+  SALVAGE
+  TRAINING
+  BAKERY
+}
+
+model Service {
+  id          String          @id @default(uuid())
+  name        String
+  category    ServiceCategory
+  description String?
+  price       Float?
+  duration    Int?
+  isActive    Boolean         @default(true)
+  metadata    Json?
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+
+  // Relations
+  bookings        Booking[]
+  serviceRequests ServiceRequest[]
+
+  @@index([category])
+  @@index([isActive])
+  @@map("services")
+}
+
+model Booking {
+  id         String   @id @default(uuid())
+  customerId String
+  serviceId  String
+  vesselId   String?
+  startDate  DateTime
+  endDate    DateTime?
+  status     String   @default("PENDING")
+  totalPrice Float
+  notes      String?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  customer Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  service  Service  @relation(fields: [serviceId], references: [id])
+
+  @@index([customerId])
+  @@index([serviceId])
+  @@index([status])
+  @@map("bookings")
+}
+
+model ServiceRequest {
+  id          String   @id @default(uuid())
+  customerId  String
+  serviceId   String
+  description String
+  priority    String   @default("MEDIUM")
+  status      String   @default("OPEN")
+  assignedTo  String?
+  resolvedAt  DateTime?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  customer Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  service  Service  @relation(fields: [serviceId], references: [id])
+
+  @@index([customerId])
+  @@index([serviceId])
+  @@index([status])
+  @@map("service_requests")
+}
+
+// ============================================
+// INSURANCE
+// ============================================
+
+enum InsuranceType {
+  HULL_AND_MACHINERY
+  PI_CLUB
+  LIABILITY
+  CARGO
+  CREW
+}
+
+model InsurancePolicy {
+  id            String        @id @default(uuid())
+  vesselId      String
+  policyNumber  String        @unique
+  provider      String
+  insuranceType InsuranceType
+  premium       Float
+  coverage      Float
+  startDate     DateTime
+  endDate       DateTime
+  status        String        @default("ACTIVE")
+  documents     String[]
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  vessel Vessel @relation(fields: [vesselId], references: [id], onDelete: Cascade)
+  claims InsuranceClaim[]
+
+  @@index([vesselId])
+  @@index([policyNumber])
+  @@index([status])
+  @@map("insurance_policies")
+}
+
+model InsuranceClaim {
+  id          String   @id @default(uuid())
+  policyId    String
+  claimNumber String   @unique
+  description String
+  amount      Float
+  status      String   @default("SUBMITTED")
+  filedAt     DateTime @default(now())
+  settledAt   DateTime?
+  documents   String[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  policy InsurancePolicy @relation(fields: [policyId], references: [id], onDelete: Cascade)
+
+  @@index([policyId])
+  @@index([status])
+  @@map("insurance_claims")
+}
+
+// ============================================
+// CLASSIFICATION & SURVEYS
+// ============================================
+
+model Survey {
+  id              String   @id @default(uuid())
+  vesselId        String
+  surveyType      String
+  classNotation   String?
+  inspector       String
+  scheduledDate   DateTime
+  completedDate   DateTime?
+  status          String   @default("SCHEDULED")
+  findings        String?
+  recommendations String?
+  documents       String[]
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  vessel Vessel @relation(fields: [vesselId], references: [id], onDelete: Cascade)
+
+  @@index([vesselId])
+  @@index([status])
+  @@map("surveys")
+}
+
+// ============================================
+// FLAG REGISTRATION
+// ============================================
+
+enum FlagCountry {
+  POLAND
+  LIBERIA
+  BAHAMAS
+  PANAMA
+  MARSHALL_ISLANDS
+  UAE
+  OTHER
+}
+
+model FlagRegistration {
+  id                String      @id @default(uuid())
+  vesselId          String
+  country           FlagCountry
+  registrationNumber String     @unique
+  mmsiNumber        String?
+  callSign          String?
+  startDate         DateTime
+  expiryDate        DateTime
+  status            String      @default("ACTIVE")
+  documents         String[]
+  fees              Float
+  createdAt         DateTime    @default(now())
+  updatedAt         DateTime    @updatedAt
+
+  vessel Vessel @relation(fields: [vesselId], references: [id], onDelete: Cascade)
+
+  @@index([vesselId])
+  @@index([registrationNumber])
+  @@index([status])
+  @@map("flag_registrations")
+}
+
+// ============================================
+// CREW MANAGEMENT
+// ============================================
+
+model CrewMember {
+  id            String   @id @default(uuid())
+  firstName     String
+  lastName      String
+  email         String?  @unique
+  phone         String
+  nationality   String
+  dateOfBirth   DateTime
+  seamanBook    String?
+  passport      String
+  position      String
+  rank          String?
+  experience    Int?
+  photo         String?
+  status        String   @default("AVAILABLE")
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  // Relations
+  certifications CrewCertification[]
+  assignments    CrewAssignment[]
+  documents      CrewDocument[]
+
+  @@index([email])
+  @@index([status])
+  @@map("crew_members")
+}
+
+model CrewCertification {
+  id            String   @id @default(uuid())
+  crewMemberId  String
+  certType      String
+  certNumber    String
+  issueDate     DateTime
+  expiryDate    DateTime
+  issuingAuth   String
+  document      String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  crewMember CrewMember @relation(fields: [crewMemberId], references: [id], onDelete: Cascade)
+
+  @@index([crewMemberId])
+  @@index([expiryDate])
+  @@map("crew_certifications")
+}
+
+model CrewAssignment {
+  id           String    @id @default(uuid())
+  crewMemberId String
+  vesselId     String
+  position     String
+  startDate    DateTime
+  endDate      DateTime?
+  status       String    @default("ACTIVE")
+  salary       Float?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  crewMember CrewMember @relation(fields: [crewMemberId], references: [id], onDelete: Cascade)
+  vessel     Vessel     @relation(fields: [vesselId], references: [id], onDelete: Cascade)
+
+  @@index([crewMemberId])
+  @@index([vesselId])
+  @@index([status])
+  @@map("crew_assignments")
+}
+
+// ============================================
+// TRAINING & CERTIFICATION
+// ============================================
+
+enum CourseType {
+  HSC
+  STCW
+  HSE
+  MEDICAL
+  SECURITY
+  TECHNICAL
+  MANAGEMENT
+}
+
+enum CourseMode {
+  ONLINE
+  PHYSICAL
+  HYBRID
+}
+
+model Course {
+  id          String     @id @default(uuid())
+  title       String
+  code        String     @unique
+  courseType  CourseType
+  mode        CourseMode
+  duration    Int
+  price       Float
+  description String?
+  syllabus    String?
+  maxStudents Int        @default(30)
+  isActive    Boolean    @default(true)
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  // Relations
+  schedules   CourseSchedule[]
+  enrollments Enrollment[]
+
+  @@index([courseType])
+  @@index([isActive])
+  @@map("courses")
+}
+
+model CourseSchedule {
+  id          String   @id @default(uuid())
+  courseId    String
+  startDate   DateTime
+  endDate     DateTime
+  instructor  String
+  location    String?
+  capacity    Int      @default(30)
+  enrolled    Int      @default(0)
+  status      String   @default("OPEN")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  course      Course       @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  enrollments Enrollment[]
+
+  @@index([courseId])
+  @@index([status])
+  @@map("course_schedules")
+}
+
+model Enrollment {
+  id           String          @id @default(uuid())
+  courseId     String
+  scheduleId   String
+  studentName  String
+  studentEmail String
+  studentPhone String
+  paymentStatus String         @default("PENDING")
+  status       String          @default("ENROLLED")
+  progress     Int             @default(0)
+  completedAt  DateTime?
+  certificateIssued Boolean     @default(false)
+  createdAt    DateTime        @default(now())
+  updatedAt    DateTime        @updatedAt
+
+  course   Course         @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  schedule CourseSchedule @relation(fields: [scheduleId], references: [id], onDelete: Cascade)
+
+  @@index([courseId])
+  @@index([scheduleId])
+  @@index([studentEmail])
+  @@map("enrollments")
+}
+
+// ============================================
+// INVENTORY & SPARE PARTS
+// ============================================
+
+model Product {
+  id          String   @id @default(uuid())
+  sku         String   @unique
+  name        String
+  category    String
+  description String?
+  unitPrice   Float
+  costPrice   Float?
+  quantity    Int      @default(0)
+  minStock    Int      @default(0)
+  supplier    String?
+  images      String[]
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  orderItems OrderItem[]
+
+  @@index([sku])
+  @@index([category])
+  @@index([isActive])
+  @@map("products")
+}
+
+// ============================================
+// ORDERS
+// ============================================
+
+enum OrderStatus {
+  PENDING
+  CONFIRMED
+  PROCESSING
+  SHIPPED
+  DELIVERED
+  CANCELLED
+}
+
+model Order {
+  id            String      @id @default(uuid())
+  customerId    String
+  orderNumber   String      @unique
+  status        OrderStatus @default(PENDING)
+  subtotal      Float
+  tax           Float       @default(0)
+  shipping      Float       @default(0)
+  total         Float
+  notes         String?
+  shippingAddress String?
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+
+  customer Customer    @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  items    OrderItem[]
+  invoices Invoice[]
+
+  @@index([customerId])
+  @@index([orderNumber])
+  @@index([status])
+  @@map("orders")
+}
+
+model OrderItem {
+  id        String   @id @default(uuid())
+  orderId   String
+  productId String
+  quantity  Int
+  unitPrice Float
+  total     Float
+  createdAt DateTime @default(now())
+
+  order   Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [productId], references: [id])
+
+  @@index([orderId])
+  @@index([productId])
+  @@map("order_items")
+}
+
+// ============================================
+// FINANCIAL
+// ============================================
+
+enum InvoiceStatus {
+  DRAFT
+  SENT
+  PAID
+  OVERDUE
+  CANCELLED
+}
+
+model Invoice {
+  id            String        @id @default(uuid())
+  customerId    String
+  orderId       String?
+  invoiceNumber String        @unique
+  status        InvoiceStatus @default(DRAFT)
+  subtotal      Float
+  tax           Float         @default(0)
+  discount      Float         @default(0)
+  total         Float
+  dueDate       DateTime
+  paidAt        DateTime?
+  notes         String?
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  customer Customer  @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  order    Order?    @relation(fields: [orderId], references: [id])
+  payments Payment[]
+
+  @@index([customerId])
+  @@index([invoiceNumber])
+  @@index([status])
+  @@map("invoices")
+}
+
+enum PaymentMethod {
+  CASH
+  CREDIT_CARD
+  BANK_TRANSFER
+  ONLINE
+}
+
+enum PaymentStatus {
+  PENDING
+  COMPLETED
+  FAILED
+  REFUNDED
+}
+
+model Payment {
+  id              String        @id @default(uuid())
+  customerId      String
+  invoiceId       String?
+  amount          Float
+  method          PaymentMethod
+  status          PaymentStatus @default(PENDING)
+  transactionId   String?
+  reference       String?
+  notes           String?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  customer Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  invoice  Invoice? @relation(fields: [invoiceId], references: [id])
+
+  @@index([customerId])
+  @@index([invoiceId])
+  @@index([status])
+  @@map("payments")
+}
+
+// ============================================
+// DOCUMENTS
+// ============================================
+
+enum DocumentType {
+  CERTIFICATE
+  CONTRACT
+  LICENSE
+  REPORT
+  INVOICE
+  INSURANCE
+  REGISTRATION
+  OTHER
+}
+
+model Document {
+  id          String       @id @default(uuid())
+  customerId  String?
+  title       String
+  docType     DocumentType
+  fileName    String
+  fileUrl     String
+  fileSize    Int
+  mimeType    String
+  description String?
+  expiryDate  DateTime?
+  isVerified  Boolean      @default(false)
+  uploadedBy  String?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  customer Customer? @relation(fields: [customerId], references: [id], onDelete: Cascade)
+
+  @@index([customerId])
+  @@index([docType])
+  @@map("documents")
+}
+
+model VesselDocument {
+  id          String       @id @default(uuid())
+  vesselId    String
+  title       String
+  docType     DocumentType
+  fileName    String
+  fileUrl     String
+  fileSize    Int
+  mimeType    String
+  description String?
+  expiryDate  DateTime?
+  isVerified  Boolean      @default(false)
+  uploadedBy  String?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  vessel Vessel @relation(fields: [vesselId], references: [id], onDelete: Cascade)
+
+  @@index([vesselId])
+  @@index([docType])
+  @@map("vessel_documents")
+}
+
+model VesselCertification {
+  id            String   @id @default(uuid())
+  vesselId      String
+  certType      String
+  certNumber    String
+  issueDate     DateTime
+  expiryDate    DateTime
+  issuingAuth   String
+  document      String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  vessel Vessel @relation(fields: [vesselId], references: [id], onDelete: Cascade)
+
+  @@index([vesselId])
+  @@index([expiryDate])
+  @@map("vessel_certifications")
+}
+
+model CrewDocument {
+  id           String       @id @default(uuid())
+  crewMemberId String
+  title        String
+  docType      DocumentType
+  fileName     String
+  fileUrl      String
+  fileSize     Int
+  mimeType     String
+  description  String?
+  expiryDate   DateTime?
+  isVerified   Boolean      @default(false)
+  uploadedBy   String?
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+
+  crewMember CrewMember @relation(fields: [crewMemberId], references: [id], onDelete: Cascade)
+
+  @@index([crewMemberId])
+  @@index([docType])
+  @@map("crew_documents")
+}
+
+// ============================================
+// MAINTENANCE & REPAIRS
+// ============================================
+
+model MaintenanceRecord {
+  id          String   @id @default(uuid())
+  vesselId    String
+  type        String
+  description String
+  scheduledDate DateTime
+  completedDate DateTime?
+  cost        Float?
+  status      String   @default("SCHEDULED")
+  technician  String?
+  notes       String?
+  documents   String[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  vessel Vessel @relation(fields: [vesselId], references: [id], onDelete: Cascade)
+
+  @@index([vesselId])
+  @@index([status])
+  @@map("maintenance_records")
+}
+
+// ============================================
+// COMMUNICATION
+// ============================================
+
+model Message {
+  id         String   @id @default(uuid())
+  senderId   String
+  receiverId String
+  subject    String?
+  body       String
+  isRead     Boolean  @default(false)
+  createdAt  DateTime @default(now())
+
+  sender User @relation(fields: [senderId], references: [id], onDelete: Cascade)
+
+  @@index([senderId])
+  @@index([receiverId])
+  @@index([isRead])
+  @@map("messages")
+}
+
+model Notification {
+  id        String   @id @default(uuid())
+  userId    String
+  title     String
+  message   String
+  type      String
+  isRead    Boolean  @default(false)
+  link      String?
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([isRead])
+  @@map("notifications")
+}
+
+model SupportTicket {
+  id          String   @id @default(uuid())
+  userId      String
+  ticketNumber String  @unique
+  subject     String
+  description String
+  priority    String   @default("MEDIUM")
+  status      String   @default("OPEN")
+  assignedTo  String?
+  resolvedAt  DateTime?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([ticketNumber])
+  @@index([status])
+  @@map("support_tickets")
+}
+
+// ============================================
+// SETTINGS & CONFIGURATION
+// ============================================
+
+model Setting {
+  id        String   @id @default(uuid())
+  key       String   @unique
+  value     String
+  category  String?
+  description String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([key])
+  @@index([category])
+  @@map("settings")
+}

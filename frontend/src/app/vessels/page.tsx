@@ -1,0 +1,239 @@
+import Link from 'next/link';
+import { Anchor, Ship, Search, Filter, MapPin, DollarSign, Calendar, ArrowRight } from 'lucide-react';
+import Footer from '@/components/Footer';
+
+export default function VesselsPage() {
+  return (
+    <div className="min-h-screen bg-gray-50">
+      {/* Header */}
+      <header className="bg-white shadow-sm sticky top-0 z-50">
+        <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+          <div className="flex justify-between items-center">
+            <Link href="/" className="flex items-center space-x-2">
+              <Anchor className="h-8 w-8 text-primary-600" />
+              <span className="text-2xl font-bold text-primary-900">Noon Marine</span>
+            </Link>
+            <div className="hidden md:flex space-x-8">
+              <Link href="/" className="text-gray-700 hover:text-primary-600 transition">Home</Link>
+              <Link href="/services" className="text-gray-700 hover:text-primary-600 transition">Services</Link>
+              <Link href="/logistics" className="text-gray-700 hover:text-primary-600 transition">Logistics</Link>
+              <Link href="/vessels" className="text-primary-600 font-medium">Vessels</Link>
+              <Link href="/about" className="text-gray-700 hover:text-primary-600 transition">About</Link>
+              <Link href="/contact" className="text-gray-700 hover:text-primary-600 transition">Contact</Link>
+            </div>
+            <div className="flex items-center space-x-4">
+              <Link href="/login" className="px-4 py-2 text-primary-600 hover:text-primary-700 font-medium transition">
+                Sign In
+              </Link>
+              <Link href="/register" className="px-6 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition font-medium">
+                Get Started
+              </Link>
+            </div>
+          </div>
+        </nav>
+      </header>
+
+      {/* Hero Section */}
+      <section className="relative bg-gradient-to-br from-primary-900 to-primary-700 text-white py-20">
+        <div className="absolute inset-0 opacity-20">
+          <img
+            src="https://images.unsplash.com/photo-1540946485063-a40da27545f8?auto=format&fit=crop&w=2000&q=80"
+            alt="Vessel Fleet"
+            className="w-full h-full object-cover"
+          />
+        </div>
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h1 className="text-5xl font-bold mb-6">Vessel Sales & Chartering</h1>
+          <p className="text-xl text-primary-100 mb-8 max-w-2xl mx-auto">
+            Browse our extensive inventory of vessels for sale and charter. From yachts to cargo ships, find the perfect vessel for your needs.
+          </p>
+        </div>
+      </section>
+
+      {/* Search & Filter Section */}
+      <section className="py-12 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="bg-gray-50 p-6 rounded-xl">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Vessel Type</label>
+                <select className="w-full px-4 py-3 border border-gray-300 rounded-lg">
+                  <option>All Types</option>
+                  <option>Cargo Ships</option>
+                  <option>Tankers</option>
+                  <option>Supply Vessels</option>
+                  <option>Yachts</option>
+                  <option>Tugboats</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Purpose</label>
+                <select className="w-full px-4 py-3 border border-gray-300 rounded-lg">
+                  <option>For Sale</option>
+                  <option>For Charter</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Price Range</label>
+                <select className="w-full px-4 py-3 border border-gray-300 rounded-lg">
+                  <option>Any Price</option>
+                  <option>Under $1M</option>
+                  <option>$1M - $5M</option>
+                  <option>$5M - $10M</option>
+                  <option>Over $10M</option>
+                </select>
+              </div>
+              <div className="flex items-end">
+                <button className="w-full bg-primary-600 text-white px-6 py-3 rounded-lg hover:bg-primary-700 transition font-semibold">
+                  <Search className="h-5 w-5 inline mr-2" />
+                  Search Vessels
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Vessels Grid */}
+      <section className="py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {vessels.map((vessel, index) => (
+              <div key={index} className="bg-white rounded-xl shadow-md hover:shadow-xl transition overflow-hidden">
+                <div className="aspect-video relative bg-gray-200">
+                  <img
+                    src={vessel.image}
+                    alt={vessel.name}
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute top-4 right-4 bg-white px-3 py-1 rounded-full text-sm font-semibold text-primary-600">
+                    {vessel.status}
+                  </div>
+                </div>
+                <div className="p-6">
+                  <h3 className="text-xl font-bold text-gray-900 mb-2">{vessel.name}</h3>
+                  <p className="text-gray-600 mb-4">{vessel.type}</p>
+                  <div className="space-y-2 mb-4">
+                    <div className="flex items-center text-sm text-gray-600">
+                      <Calendar className="h-4 w-4 mr-2" />
+                      <span>Year: {vessel.year}</span>
+                    </div>
+                    <div className="flex items-center text-sm text-gray-600">
+                      <MapPin className="h-4 w-4 mr-2" />
+                      <span>{vessel.location}</span>
+                    </div>
+                    <div className="flex items-center text-sm text-gray-600">
+                      <Ship className="h-4 w-4 mr-2" />
+                      <span>DWT: {vessel.dwt}</span>
+                    </div>
+                  </div>
+                  <div className="flex items-center justify-between pt-4 border-t border-gray-200">
+                    <div>
+                      <div className="text-2xl font-bold text-primary-600">${vessel.price}</div>
+                      <div className="text-xs text-gray-500">{vessel.priceType}</div>
+                    </div>
+                    <Link
+                      href="/contact"
+                      className="inline-flex items-center px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition text-sm font-medium"
+                    >
+                      Inquire
+                      <ArrowRight className="ml-2 h-4 w-4" />
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="bg-primary-600 text-white py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="text-4xl font-bold mb-4">Can't Find What You're Looking For?</h2>
+          <p className="text-xl text-primary-100 mb-8">
+            Contact our vessel specialists for personalized assistance
+          </p>
+          <Link
+            href="/contact"
+            className="inline-flex items-center bg-white text-primary-600 px-8 py-4 rounded-lg font-semibold hover:bg-primary-50 transition text-lg"
+          >
+            Contact Us
+            <ArrowRight className="ml-2 h-5 w-5" />
+          </Link>
+        </div>
+      </section>
+
+      <Footer />
+    </div>
+  );
+}
+
+const vessels = [
+  {
+    name: 'MV OCEAN STAR',
+    type: 'General Cargo Ship',
+    year: '2018',
+    location: 'Dubai, UAE',
+    dwt: '15,000 MT',
+    price: '12.5M',
+    priceType: 'For Sale',
+    status: 'For Sale',
+    image: 'https://images.unsplash.com/photo-1566487097168-e91a4cafd685?auto=format&fit=crop&w=800&q=80',
+  },
+  {
+    name: 'MV PACIFIC VOYAGER',
+    type: 'Container Vessel',
+    year: '2020',
+    location: 'Singapore',
+    dwt: '25,000 MT',
+    price: '18M',
+    priceType: 'For Sale',
+    status: 'For Sale',
+    image: 'https://images.unsplash.com/photo-1578575437130-527eed3abbec?auto=format&fit=crop&w=800&q=80',
+  },
+  {
+    name: 'MV ATLANTIC PRIDE',
+    type: 'Oil Tanker',
+    year: '2019',
+    location: 'Rotterdam',
+    dwt: '35,000 MT',
+    price: '5,000',
+    priceType: 'Per Day',
+    status: 'For Charter',
+    image: 'https://images.unsplash.com/photo-1540946485063-a40da27545f8?auto=format&fit=crop&w=800&q=80',
+  },
+  {
+    name: 'LUXURY YACHT ALBA',
+    type: 'Luxury Yacht',
+    year: '2021',
+    location: 'Monaco',
+    dwt: '500 GT',
+    price: '25M',
+    priceType: 'For Sale',
+    status: 'For Sale',
+    image: 'https://images.unsplash.com/photo-1567899378494-47b22a2ae96a?auto=format&fit=crop&w=800&q=80',
+  },
+  {
+    name: 'MV SUPPLY MASTER',
+    type: 'Platform Supply Vessel',
+    year: '2017',
+    location: 'Abu Dhabi, UAE',
+    dwt: '3,000 MT',
+    price: '2,500',
+    priceType: 'Per Day',
+    status: 'For Charter',
+    image: 'https://images.unsplash.com/photo-1605281317010-fe5ffe798166?auto=format&fit=crop&w=800&q=80',
+  },
+  {
+    name: 'MV ANCHOR POINT',
+    type: 'Tugboat',
+    year: '2016',
+    location: 'Jebel Ali, Dubai',
+    dwt: '1,200 MT',
+    price: '4.5M',
+    priceType: 'For Sale',
+    status: 'For Sale',
+    image: 'https://images.unsplash.com/photo-1606925797300-0b35e9d1794e?auto=format&fit=crop&w=800&q=80',
+  },
+];
