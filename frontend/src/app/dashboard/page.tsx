@@ -167,7 +167,7 @@ export default function DashboardPage() {
 
           {/* Main Content */}
           <div className="lg:col-span-3">
-            {activeTab === 'overview' && <OverviewTab />}
+            {activeTab === 'overview' && <OverviewTab setActiveTab={setActiveTab} />}
             {activeTab === 'services' && <ServicesTab />}
             {activeTab === 'requests' && <RequestsTab />}
             {activeTab === 'profile' && <ProfileTab />}
@@ -179,7 +179,7 @@ export default function DashboardPage() {
   );
 }
 
-function OverviewTab() {
+function OverviewTab({ setActiveTab }: { setActiveTab: (tab: string) => void }) {
   const [user, setUser] = useState<any>(null);
 
   useEffect(() => {

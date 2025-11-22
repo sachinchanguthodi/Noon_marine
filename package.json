@@ -1,0 +1,16 @@
+{
+  "name": "noon-marine-platform",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Noon Marine Platform - Modern maritime services platform",
+  "scripts": {
+    "dev": "cd frontend && npm run dev",
+    "build": "cd frontend && npm run build",
+    "start": "cd frontend && npm run start",
+    "lint": "cd frontend && npm run lint"
+  },
+  "workspaces": [
+    "frontend",
+    "backend"
+  ]
+}
