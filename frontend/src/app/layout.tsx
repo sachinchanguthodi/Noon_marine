@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { Outfit, Roboto } from 'next/font/google';
+import { Outfit, Noto_Sans_Display } from 'next/font/google';
 import './globals.css';
 
 const outfit = Outfit({
@@ -8,10 +8,10 @@ const outfit = Outfit({
   display: 'swap',
 });
 
-const roboto = Roboto({
+const notoSansDisplay = Noto_Sans_Display({
   subsets: ['latin'],
-  weight: ['400', '500', '700'],
-  variable: '--font-roboto',
+  weight: ['400', '500', '600', '700'],
+  variable: '--font-noto-sans-display',
   display: 'swap',
 });
 
@@ -28,7 +28,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${roboto.variable} ${outfit.variable} font-sans antialiased`}>
+      <body className={`${notoSansDisplay.variable} ${outfit.variable} font-sans antialiased`}>
         {children}
       </body>
     </html>
