@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { Outfit, Inter } from 'next/font/google';
+import { Outfit, Roboto } from 'next/font/google';
 import './globals.css';
 
 const outfit = Outfit({
@@ -8,9 +8,10 @@ const outfit = Outfit({
   display: 'swap',
 });
 
-const inter = Inter({
+const roboto = Roboto({
   subsets: ['latin'],
-  variable: '--font-inter',
+  weight: ['400', '500', '700'],
+  variable: '--font-roboto',
   display: 'swap',
 });
 
@@ -27,7 +28,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${inter.variable} ${outfit.variable} font-sans antialiased`}>
+      <body className={`${roboto.variable} ${outfit.variable} font-sans antialiased`}>
         {children}
       </body>
     </html>
