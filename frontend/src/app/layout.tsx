@@ -27,8 +27,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body className={`${notoSansDisplay.variable} ${outfit.variable} font-sans antialiased`}>
+    <html lang="en" className={`${notoSansDisplay.variable} ${outfit.variable}`}>
+      <body className="font-sans antialiased">
         {children}
       </body>
     </html>
