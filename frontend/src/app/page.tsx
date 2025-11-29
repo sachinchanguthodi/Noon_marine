@@ -68,13 +68,27 @@ export default function HomePage() {
               </Link>
             </div>
 
-            {/* Mobile Menu Button */}
-            <button
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden p-2 text-gray-700 hover:text-primary-600 transition"
-            >
-              {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-            </button>
+            {/* Mobile Auth Buttons + Menu */}
+            <div className="md:hidden flex items-center space-x-2">
+              <Link
+                href="/login"
+                className="px-2 py-1.5 text-xs text-primary-600 hover:text-primary-700 font-medium transition"
+              >
+                Sign In
+              </Link>
+              <Link
+                href="/register"
+                className="px-3 py-1.5 text-xs bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition font-medium"
+              >
+                Get Started
+              </Link>
+              <button
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                className="p-2 text-gray-700 hover:text-primary-600 transition"
+              >
+                {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+              </button>
+            </div>
           </div>
 
           {/* Mobile Navigation Menu */}
@@ -123,22 +137,6 @@ export default function HomePage() {
                 >
                   Contact
                 </Link>
-                <div className="pt-4 border-t border-gray-200 flex flex-col space-y-3">
-                  <Link
-                    href="/login"
-                    className="text-center px-4 py-2 text-primary-600 hover:text-primary-700 font-medium transition border border-primary-600 rounded-lg"
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    Sign In
-                  </Link>
-                  <Link
-                    href="/register"
-                    className="text-center px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition font-medium"
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    Get Started
-                  </Link>
-                </div>
               </div>
             </div>
           )}
