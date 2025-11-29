@@ -17,7 +17,10 @@ import {
   Award,
   TrendingUp,
   Headphones,
-  Star
+  Star,
+  ClipboardCheck,
+  LifeBuoy,
+  Building2
 } from 'lucide-react';
 
 export default function HomePage() {
@@ -296,9 +299,14 @@ const services = [
     description: 'Buy, sell, or charter vessels worldwide',
   },
   {
-    icon: Shield,
-    title: 'Marine Insurance',
-    description: 'Comprehensive coverage for vessels & cargo',
+    icon: Users,
+    title: 'Vessel Management & Manning',
+    description: 'End-to-end vessel management with crew',
+  },
+  {
+    icon: Wrench,
+    title: 'Repair & Docking',
+    description: 'Dry-docking and maintenance services',
   },
   {
     icon: Flag,
@@ -306,14 +314,24 @@ const services = [
     description: 'International flag registration services',
   },
   {
-    icon: Users,
-    title: 'Crew Management',
-    description: 'Recruitment and operational support',
+    icon: ClipboardCheck,
+    title: 'Classification & Survey',
+    description: 'Class notations and periodic surveys',
   },
   {
-    icon: Wrench,
-    title: 'Repair & Docking',
-    description: 'Dry-docking and maintenance services',
+    icon: FileText,
+    title: 'Legal Consultancy',
+    description: 'Maritime law and contract review',
+  },
+  {
+    icon: Shield,
+    title: 'Marine Insurance',
+    description: 'Hull, P&I, and cargo insurance',
+  },
+  {
+    icon: Building2,
+    title: 'Offshore Project Support',
+    description: 'Engineering and logistics for offshore',
   },
   {
     icon: Package,
@@ -326,9 +344,19 @@ const services = [
     description: 'Heavy equipment and cargo services',
   },
   {
+    icon: LifeBuoy,
+    title: 'Salvage & Towage',
+    description: 'Emergency towage and salvage services',
+  },
+  {
     icon: GraduationCap,
     title: 'Training & Certification',
     description: 'STCW, HSE, and professional courses',
+  },
+  {
+    icon: Globe,
+    title: 'Digital Platform Operations',
+    description: 'Online dealer portal and tracking',
   },
 ];
 
