@@ -1,4 +1,7 @@
+'use client';
+
 import Link from 'next/link';
+import { useState } from 'react';
 import {
   Ship,
   Shield,
@@ -20,10 +23,14 @@ import {
   Star,
   ClipboardCheck,
   LifeBuoy,
-  Building2
+  Building2,
+  Menu,
+  X
 } from 'lucide-react';
 
 export default function HomePage() {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
   return (
     <div className="min-h-screen">
       {/* Header */}
@@ -34,6 +41,8 @@ export default function HomePage() {
               <Anchor className="h-6 w-6 sm:h-8 sm:w-8 text-primary-600" />
               <span className="text-lg sm:text-2xl font-bold text-primary-900">Noon Marine</span>
             </Link>
+
+            {/* Desktop Navigation */}
             <div className="hidden md:flex space-x-8">
               <Link href="/services" className="text-gray-700 hover:text-primary-600 transition">Services</Link>
               <Link href="/logistics" className="text-gray-700 hover:text-primary-600 transition">Logistics</Link>
@@ -42,21 +51,97 @@ export default function HomePage() {
               <Link href="/about" className="text-gray-700 hover:text-primary-600 transition">About</Link>
               <Link href="/contact" className="text-gray-700 hover:text-primary-600 transition">Contact</Link>
             </div>
-            <div className="flex items-center space-x-2 sm:space-x-4">
+
+            {/* Desktop Auth Buttons */}
+            <div className="hidden md:flex items-center space-x-4">
               <Link
                 href="/login"
-                className="px-3 py-2 sm:px-4 text-sm sm:text-base text-primary-600 hover:text-primary-700 font-medium transition"
+                className="px-4 py-2 text-primary-600 hover:text-primary-700 font-medium transition"
               >
                 Sign In
               </Link>
               <Link
                 href="/register"
-                className="px-4 py-2 sm:px-6 text-sm sm:text-base bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition font-medium"
+                className="px-6 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition font-medium"
               >
                 Get Started
               </Link>
             </div>
+
+            {/* Mobile Menu Button */}
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="md:hidden p-2 text-gray-700 hover:text-primary-600 transition"
+            >
+              {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+            </button>
           </div>
+
+          {/* Mobile Navigation Menu */}
+          {mobileMenuOpen && (
+            <div className="md:hidden mt-4 pb-4 border-t border-gray-200 pt-4">
+              <div className="flex flex-col space-y-3">
+                <Link
+                  href="/services"
+                  className="text-gray-700 hover:text-primary-600 transition py-2 px-2 hover:bg-gray-50 rounded"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  Services
+                </Link>
+                <Link
+                  href="/logistics"
+                  className="text-gray-700 hover:text-primary-600 transition py-2 px-2 hover:bg-gray-50 rounded"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  Logistics
+                </Link>
+                <Link
+                  href="/vessels"
+                  className="text-gray-700 hover:text-primary-600 transition py-2 px-2 hover:bg-gray-50 rounded"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  Vessels
+                </Link>
+                <Link
+                  href="/training"
+                  className="text-gray-700 hover:text-primary-600 transition py-2 px-2 hover:bg-gray-50 rounded"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  Training
+                </Link>
+                <Link
+                  href="/about"
+                  className="text-gray-700 hover:text-primary-600 transition py-2 px-2 hover:bg-gray-50 rounded"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  About
+                </Link>
+                <Link
+                  href="/contact"
+                  className="text-gray-700 hover:text-primary-600 transition py-2 px-2 hover:bg-gray-50 rounded"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  Contact
+                </Link>
+                <div className="pt-4 border-t border-gray-200 flex flex-col space-y-3">
+                  <Link
+                    href="/login"
+                    className="text-center px-4 py-2 text-primary-600 hover:text-primary-700 font-medium transition border border-primary-600 rounded-lg"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    Sign In
+                  </Link>
+                  <Link
+                    href="/register"
+                    className="text-center px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition font-medium"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    Get Started
+                  </Link>
+                </div>
+              </div>
+            </div>
+          )}
         </nav>
       </header>
 
