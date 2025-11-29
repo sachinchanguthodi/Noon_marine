@@ -25,11 +25,11 @@ export default function HomePage() {
     <div className="min-h-screen">
       {/* Header */}
       <header className="bg-white shadow-sm sticky top-0 z-50">
-        <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+        <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 sm:py-4">
           <div className="flex justify-between items-center">
             <Link href="/" className="flex items-center space-x-2">
-              <Anchor className="h-8 w-8 text-primary-600" />
-              <span className="text-2xl font-bold text-primary-900">Noon Marine</span>
+              <Anchor className="h-6 w-6 sm:h-8 sm:w-8 text-primary-600" />
+              <span className="text-lg sm:text-2xl font-bold text-primary-900">Noon Marine</span>
             </Link>
             <div className="hidden md:flex space-x-8">
               <Link href="/services" className="text-gray-700 hover:text-primary-600 transition">Services</Link>
@@ -39,16 +39,16 @@ export default function HomePage() {
               <Link href="/about" className="text-gray-700 hover:text-primary-600 transition">About</Link>
               <Link href="/contact" className="text-gray-700 hover:text-primary-600 transition">Contact</Link>
             </div>
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-2 sm:space-x-4">
               <Link
                 href="/login"
-                className="px-4 py-2 text-primary-600 hover:text-primary-700 font-medium transition"
+                className="px-3 py-2 sm:px-4 text-sm sm:text-base text-primary-600 hover:text-primary-700 font-medium transition"
               >
                 Sign In
               </Link>
               <Link
                 href="/register"
-                className="px-6 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition font-medium"
+                className="px-4 py-2 sm:px-6 text-sm sm:text-base bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition font-medium"
               >
                 Get Started
               </Link>
@@ -57,12 +57,39 @@ export default function HomePage() {
         </nav>
       </header>
 
-      {/* Hero Section - Professional & Modern */}
-      <section className="relative bg-gradient-to-br from-slate-900 via-blue-900 to-slate-800 text-white overflow-hidden min-h-[700px] flex items-center">
-        {/* Animated gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-tr from-blue-600/20 via-cyan-500/10 to-blue-900/30 animate-pulse"></div>
+      {/* Services Overview - At the Very Top */}
+      <section className="py-8 sm:py-12 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-6 sm:mb-8">
+            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2 sm:mb-3">Our Maritime Services</h2>
+            <p className="text-sm sm:text-base md:text-lg text-gray-600 max-w-2xl mx-auto px-2">
+              Everything you need for maritime operations - all in one place
+            </p>
+          </div>
 
-        {/* Grid pattern overlay */}
+          <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
+            {services.map((service, index) => (
+              <Link
+                href="/services"
+                key={index}
+                className="group bg-gradient-to-br from-white to-gray-50 p-3 sm:p-4 rounded-lg shadow hover:shadow-xl transition-all duration-300 border border-gray-200 hover:border-primary-300 active:scale-95"
+              >
+                <div className="bg-gradient-to-br from-primary-500 to-primary-600 p-2 sm:p-3 rounded-lg w-fit mb-2 sm:mb-3 group-hover:scale-110 transition-transform">
+                  <service.icon className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
+                </div>
+                <h3 className="text-xs sm:text-sm font-bold text-gray-900 mb-1 group-hover:text-primary-600 transition leading-tight">
+                  {service.title}
+                </h3>
+                <p className="text-gray-600 text-[10px] sm:text-xs leading-tight">{service.description}</p>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Call to Action Section - Below Services */}
+      <section className="relative bg-gradient-to-br from-slate-900 via-blue-900 to-slate-800 text-white overflow-hidden py-10 sm:py-12">
+        <div className="absolute inset-0 bg-gradient-to-tr from-blue-600/20 via-cyan-500/10 to-blue-900/30 animate-pulse"></div>
         <div className="absolute inset-0 opacity-10">
           <div className="absolute inset-0" style={{
             backgroundImage: `linear-gradient(rgba(255,255,255,.05) 1px, transparent 1px),
@@ -70,67 +97,30 @@ export default function HomePage() {
             backgroundSize: '50px 50px'
           }}></div>
         </div>
-
-        {/* Subtle maritime image overlay */}
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-slate-900/50"></div>
-          <img
-            src="https://images.pexels.com/photos/163236/luxury-yacht-boat-speed-water-163236.jpeg?auto=compress&cs=tinysrgb&w=2000"
-            alt="Maritime operations"
-            className="w-full h-full object-cover"
-          />
-        </div>
-
-        {/* Floating shapes for depth */}
-        <div className="absolute top-20 left-10 w-72 h-72 bg-blue-500/10 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-20 right-10 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl"></div>
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-          <div className="max-w-3xl">
-            <div className="inline-flex items-center bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full mb-6">
-              <Star className="h-5 w-5 text-yellow-400 mr-2" />
-              <span className="text-sm font-medium">Trusted by 1000+ maritime professionals</span>
-            </div>
-            <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight">
-              Your Complete Maritime Solution Hub
-            </h1>
-            <p className="text-xl md:text-2xl mb-8 text-primary-100 leading-relaxed">
-              From vessel sales to crew training, insurance to flag registration - access all essential maritime services through one powerful platform.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 mb-12">
-              <Link
-                href="/register"
-                className="inline-flex items-center justify-center bg-white text-primary-700 px-8 py-4 rounded-lg font-semibold hover:bg-primary-50 transition shadow-xl text-lg"
-              >
-                Start Free Account
-                <ArrowRight className="ml-2 h-5 w-5" />
-              </Link>
-              <Link
-                href="/services"
-                className="inline-flex items-center justify-center border-2 border-white text-white px-8 py-4 rounded-lg font-semibold hover:bg-white hover:text-primary-700 transition text-lg"
-              >
-                Explore Services
-              </Link>
-            </div>
-            <div className="grid grid-cols-3 gap-6 max-w-2xl">
-              <div className="text-center">
-                <div className="text-3xl font-bold mb-1">13+</div>
-                <div className="text-primary-200 text-sm">Services</div>
-              </div>
-              <div className="text-center">
-                <div className="text-3xl font-bold mb-1">50+</div>
-                <div className="text-primary-200 text-sm">Countries</div>
-              </div>
-              <div className="text-center">
-                <div className="text-3xl font-bold mb-1">24/7</div>
-                <div className="text-primary-200 text-sm">Support</div>
-              </div>
-            </div>
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <p className="text-base sm:text-lg md:text-xl text-primary-100 mb-6 sm:mb-8 max-w-3xl mx-auto px-2">
+            From vessel sales to crew training, insurance to flag registration - access all essential maritime services through one powerful platform.
+          </p>
+          <div className="flex flex-col sm:flex-row justify-center gap-3 sm:gap-4">
+            <Link
+              href="/register"
+              className="inline-flex items-center justify-center bg-white text-primary-700 px-6 py-3 sm:px-8 sm:py-4 rounded-lg font-semibold hover:bg-primary-50 transition shadow-xl text-base sm:text-lg"
+            >
+              Start Free Account
+              <ArrowRight className="ml-2 h-5 w-5" />
+            </Link>
+            <Link
+              href="/contact"
+              className="inline-flex items-center justify-center border-2 border-white text-white px-6 py-3 sm:px-8 sm:py-4 rounded-lg font-semibold hover:bg-white hover:text-primary-700 transition text-base sm:text-lg"
+            >
+              Contact Us
+            </Link>
           </div>
         </div>
       </section>
 
       {/* Features Section */}
-      <section className="py-16 bg-white">
+      <section className="py-12 bg-gradient-to-b from-gray-50 to-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div className="text-center">
@@ -161,50 +151,6 @@ export default function HomePage() {
               <h3 className="text-lg font-semibold mb-2">Expert Support</h3>
               <p className="text-gray-600">Dedicated marine professionals at your service</p>
             </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Services Overview */}
-      <section className="py-20 bg-gradient-to-b from-gray-50 to-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">Complete Maritime Services</h2>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Everything you need for maritime operations - all in one place
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {services.map((service, index) => (
-              <Link
-                href="/services"
-                key={index}
-                className="group bg-white p-6 rounded-xl shadow-md hover:shadow-2xl transition-all duration-300 border border-gray-100 hover:border-primary-200"
-              >
-                <div className="bg-gradient-to-br from-primary-500 to-primary-600 p-4 rounded-lg w-fit mb-4 group-hover:scale-110 transition-transform">
-                  <service.icon className="h-7 w-7 text-white" />
-                </div>
-                <h3 className="text-lg font-bold text-gray-900 mb-2 group-hover:text-primary-600 transition">
-                  {service.title}
-                </h3>
-                <p className="text-gray-600 text-sm mb-3">{service.description}</p>
-                <div className="flex items-center text-primary-600 text-sm font-medium">
-                  Learn more
-                  <ArrowRight className="h-4 w-4 ml-1 group-hover:translate-x-1 transition-transform" />
-                </div>
-              </Link>
-            ))}
-          </div>
-
-          <div className="text-center mt-12">
-            <Link
-              href="/services"
-              className="inline-flex items-center px-8 py-4 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition font-semibold text-lg"
-            >
-              View All Services
-              <ArrowRight className="ml-2 h-5 w-5" />
-            </Link>
           </div>
         </div>
       </section>
