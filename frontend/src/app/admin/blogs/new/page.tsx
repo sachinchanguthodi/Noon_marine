@@ -1,10 +1,28 @@
 'use client';
 
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import BlogForm from '@/components/BlogForm';
 import { blogService } from '@/lib/blogService';
 import { BlogPost } from '@/lib/supabase';
 
 export default function NewBlogPage() {
+  const router = useRouter();
+
+  useEffect(() => {
+    const storedUser = localStorage.getItem('user');
+    if (!storedUser) {
+      router.push('/login');
+      return;
+    }
+
+    const user = JSON.parse(storedUser);
+    if (!['SUPER_ADMIN', 'ADMIN', 'MANAGER'].includes(user.role)) {
+      router.push('/dashboard');
+      return;
+    }
+  }, [router]);
+
   const handleSubmit = async (data: Partial<BlogPost>) => {
     await blogService.create(data);
   };

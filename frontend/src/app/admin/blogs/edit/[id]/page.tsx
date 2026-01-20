@@ -1,20 +1,33 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import BlogForm from '@/components/BlogForm';
 import { blogService } from '@/lib/blogService';
 import { BlogPost } from '@/lib/supabase';
 
 export default function EditBlogPage() {
   const params = useParams();
+  const router = useRouter();
   const id = params.id as string;
   const [blog, setBlog] = useState<BlogPost | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    const storedUser = localStorage.getItem('user');
+    if (!storedUser) {
+      router.push('/login');
+      return;
+    }
+
+    const user = JSON.parse(storedUser);
+    if (!['SUPER_ADMIN', 'ADMIN', 'MANAGER'].includes(user.role)) {
+      router.push('/dashboard');
+      return;
+    }
+
     loadBlog();
-  }, [id]);
+  }, [id, router]);
 
   const loadBlog = async () => {
     try {
