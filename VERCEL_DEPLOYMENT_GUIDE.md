@@ -16,7 +16,7 @@ Your Vercel deployment failed because the Supabase environment variables weren't
 
 ```
 NEXT_PUBLIC_BASE_URL
-Value: https://your-vercel-domain.vercel.app
+Value: https://noonmarine.uk
 Environment: Production, Preview, Development
 
 NEXT_PUBLIC_SUPABASE_URL
@@ -48,10 +48,10 @@ After adding the environment variables:
 
 Once deployed, check these URLs:
 
-- **Homepage**: `https://your-domain.vercel.app/`
-- **Blog Listing**: `https://your-domain.vercel.app/blog`
-- **Admin Panel**: `https://your-domain.vercel.app/admin/blogs`
-- **Sitemap**: `https://your-domain.vercel.app/sitemap.xml`
+- **Homepage**: `https://noonmarine.uk/`
+- **Blog Listing**: `https://noonmarine.uk/blog`
+- **Admin Panel**: `https://noonmarine.uk/admin/blogs`
+- **Sitemap**: `https://noonmarine.uk/sitemap.xml`
 
 ---
 

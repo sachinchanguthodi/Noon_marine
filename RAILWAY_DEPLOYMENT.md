@@ -52,7 +52,7 @@ JWT_EXPIRE
 7d
 
 FRONTEND_URL
-https://noon-marine.vercel.app
+https://noonmarine.uk
 
 NODE_ENV
 production

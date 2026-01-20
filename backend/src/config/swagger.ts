@@ -11,7 +11,7 @@ const options = {
       contact: {
         name: 'Noon Marine',
         email: 'info@noonmarine.com',
-        url: 'https://noon-marine.vercel.app',
+        url: 'https://noonmarine.uk',
       },
     },
     servers: [

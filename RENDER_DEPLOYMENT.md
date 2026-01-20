@@ -52,7 +52,7 @@ JWT_SECRET=noon-marine-super-secret-jwt-key-2024-production-ready
 JWT_EXPIRE=7d
 
 # Frontend URL
-FRONTEND_URL=https://noon-marine.vercel.app
+FRONTEND_URL=https://noonmarine.uk
 
 # Node Configuration
 NODE_ENV=production

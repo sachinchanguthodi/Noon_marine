@@ -28,7 +28,7 @@ If you want to use the existing backend authentication:
 Add these to your Vercel project settings:
 
 ```bash
-NEXT_PUBLIC_BASE_URL=https://your-domain.vercel.app
+NEXT_PUBLIC_BASE_URL=https://noonmarine.uk
 NEXT_PUBLIC_SUPABASE_URL=https://0ec90b57d6e95fcbda19832f.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJib2x0IiwicmVmIjoiMGVjOTBiNTdkNmU5NWZjYmRhMTk4MzJmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg4ODE1NzQsImV4cCI6MTc1ODg4MTU3NH0.9I8-U0x86Ak8t2DGaIk0HfvTSLsAyzdnz-Nw00mMkKw
 NEXT_PUBLIC_API_URL=https://your-backend-url.com
@@ -136,7 +136,7 @@ The `blog_posts` table includes:
 1. **Add your domain** to `NEXT_PUBLIC_BASE_URL` in Vercel
 2. **Test the deployment** after adding environment variables
 3. **Create your first blog post** at `/admin/blogs/new`
-4. **Verify the sitemap** at `https://your-domain.vercel.app/sitemap.xml`
+4. **Verify the sitemap** at `https://noonmarine.uk/sitemap.xml`
 
 ## Support
 
