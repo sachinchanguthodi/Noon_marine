@@ -6,8 +6,9 @@ export function middleware(request: NextRequest) {
 
   if (path.startsWith('/admin')) {
     const token = request.cookies.get('token')?.value;
+    const authHeader = request.headers.get('authorization');
 
-    if (!token) {
+    if (!token && !authHeader) {
       return NextResponse.redirect(new URL('/login', request.url));
     }
   }

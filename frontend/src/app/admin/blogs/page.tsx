@@ -11,8 +11,20 @@ export default function AdminBlogsPage() {
   const router = useRouter();
 
   useEffect(() => {
+    const storedUser = localStorage.getItem('user');
+    if (!storedUser) {
+      router.push('/login');
+      return;
+    }
+
+    const user = JSON.parse(storedUser);
+    if (!['SUPER_ADMIN', 'ADMIN', 'MANAGER'].includes(user.role)) {
+      router.push('/dashboard');
+      return;
+    }
+
     loadBlogs();
-  }, []);
+  }, [router]);
 
   const loadBlogs = async () => {
     try {
