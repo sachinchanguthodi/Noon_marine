@@ -30,6 +30,7 @@ import {
   Building2,
   Globe,
   ShieldCheck,
+  BookOpen,
 } from 'lucide-react';
 
 export default function DashboardPage() {
@@ -142,13 +143,20 @@ export default function DashboardPage() {
                   <span className="font-medium">Settings</span>
                 </button>
                 {user && ['SUPER_ADMIN', 'ADMIN', 'MANAGER'].includes(user.role) && (
-                  <div className="pt-4 border-t border-gray-200">
+                  <div className="pt-4 border-t border-gray-200 space-y-2">
                     <Link
                       href="/admin"
                       className="w-full flex items-center space-x-3 px-4 py-3 rounded-lg bg-gradient-to-r from-primary-600 to-primary-700 text-white hover:from-primary-700 hover:to-primary-800 transition"
                     >
                       <ShieldCheck className="h-5 w-5" />
                       <span className="font-medium">Admin Panel</span>
+                    </Link>
+                    <Link
+                      href="/admin/blogs"
+                      className="w-full flex items-center space-x-3 px-4 py-3 rounded-lg bg-gradient-to-r from-blue-600 to-blue-700 text-white hover:from-blue-700 hover:to-blue-800 transition"
+                    >
+                      <BookOpen className="h-5 w-5" />
+                      <span className="font-medium">Blog Management</span>
                     </Link>
                   </div>
                 )}
