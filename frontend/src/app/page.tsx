@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   Ship,
   Shield,
@@ -25,11 +25,41 @@ import {
   LifeBuoy,
   Building2,
   Menu,
-  X
+  X,
+  Calendar,
+  BookOpen
 } from 'lucide-react';
+
+interface BlogPost {
+  id: string;
+  title: string;
+  slug: string;
+  excerpt?: string;
+  created_at: string;
+  published_at?: string;
+  status: 'DRAFT' | 'PUBLISHED' | 'ARCHIVED';
+}
 
 export default function HomePage() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [recentBlogs, setRecentBlogs] = useState<BlogPost[]>([]);
+  const [blogsLoading, setBlogsLoading] = useState(true);
+
+  useEffect(() => {
+    fetchRecentBlogs();
+  }, []);
+
+  const fetchRecentBlogs = async () => {
+    try {
+      const { blogService } = await import('@/lib/blogService');
+      const blogs = await blogService.getAllPublished();
+      setRecentBlogs(blogs.slice(0, 3));
+    } catch (error) {
+      console.error('Failed to fetch blogs:', error);
+    } finally {
+      setBlogsLoading(false);
+    }
+  };
 
   return (
     <div className="min-h-screen">
@@ -47,7 +77,7 @@ export default function HomePage() {
               <Link href="/services" className="text-gray-700 hover:text-primary-600 transition">Services</Link>
               <Link href="/logistics" className="text-gray-700 hover:text-primary-600 transition">Logistics</Link>
               <Link href="/vessels" className="text-gray-700 hover:text-primary-600 transition">Vessels</Link>
-              <Link href="/training" className="text-gray-700 hover:text-primary-600 transition">Training</Link>
+              <Link href="/blog" className="text-gray-700 hover:text-primary-600 transition">Blog</Link>
               <Link href="/about" className="text-gray-700 hover:text-primary-600 transition">About</Link>
               <Link href="/contact" className="text-gray-700 hover:text-primary-600 transition">Contact</Link>
             </div>
@@ -117,11 +147,11 @@ export default function HomePage() {
                   Vessels
                 </Link>
                 <Link
-                  href="/training"
+                  href="/blog"
                   className="text-gray-700 hover:text-primary-600 transition py-2 px-2 hover:bg-gray-50 rounded"
                   onClick={() => setMobileMenuOpen(false)}
                 >
-                  Training
+                  Blog
                 </Link>
                 <Link
                   href="/about"
@@ -285,6 +315,74 @@ export default function HomePage() {
               </div>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* Recent Blogs Section */}
+      <section className="py-16 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+              Latest Maritime Insights
+            </h2>
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+              Stay updated with the latest news, trends, and insights from the maritime industry
+            </p>
+          </div>
+
+          {blogsLoading ? (
+            <div className="text-center py-12">
+              <p className="text-gray-500">Loading latest articles...</p>
+            </div>
+          ) : recentBlogs.length === 0 ? (
+            <div className="text-center py-12">
+              <BookOpen className="h-16 w-16 text-gray-300 mx-auto mb-4" />
+              <p className="text-gray-500">No blog posts available yet. Check back soon!</p>
+            </div>
+          ) : (
+            <>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-10">
+                {recentBlogs.map((blog) => (
+                  <Link
+                    key={blog.id}
+                    href={`/blog/${blog.slug}`}
+                    className="group bg-white rounded-xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-200 hover:border-primary-300"
+                  >
+                    <div className="p-6">
+                      <div className="flex items-center text-sm text-gray-500 mb-3">
+                        <Calendar className="h-4 w-4 mr-2" />
+                        {new Date(blog.published_at || blog.created_at).toLocaleDateString('en-US', {
+                          month: 'short',
+                          day: 'numeric',
+                          year: 'numeric'
+                        })}
+                      </div>
+                      <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-primary-600 transition line-clamp-2">
+                        {blog.title}
+                      </h3>
+                      <p className="text-gray-600 mb-4 line-clamp-3">
+                        {blog.excerpt || 'Read this article to learn more...'}
+                      </p>
+                      <div className="flex items-center text-primary-600 font-medium group-hover:text-primary-700">
+                        Read More
+                        <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                      </div>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+
+              <div className="text-center">
+                <Link
+                  href="/blog"
+                  className="inline-flex items-center justify-center bg-primary-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-primary-700 transition shadow-lg"
+                >
+                  View All Articles
+                  <ArrowRight className="ml-2 h-5 w-5" />
+                </Link>
+              </div>
+            </>
+          )}
         </div>
       </section>
 
