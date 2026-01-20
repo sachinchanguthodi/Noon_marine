@@ -1,22 +1,36 @@
 import { MetadataRoute } from 'next';
-import { supabase } from '@/lib/supabase';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://noon-marine-platform.vercel.app';
 
-  const { data: blogs } = await supabase
-    .from('blog_posts')
-    .select('slug, updated_at, published_at')
-    .eq('status', 'PUBLISHED')
-    .order('published_at', { ascending: false });
+  let blogUrls: MetadataRoute.Sitemap = [];
 
-  const blogUrls =
-    blogs?.map((blog) => ({
-      url: `${baseUrl}/blog/${blog.slug}`,
-      lastModified: new Date(blog.updated_at),
-      changeFrequency: 'weekly' as const,
-      priority: 0.7,
-    })) || [];
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.VITE_SUPABASE_URL;
+  const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || process.env.VITE_SUPABASE_ANON_KEY;
+
+  if (supabaseUrl && supabaseKey) {
+    try {
+      const { createClient } = await import('@supabase/supabase-js');
+      const supabase = createClient(supabaseUrl, supabaseKey);
+
+      const { data: blogs, error } = await supabase
+        .from('blog_posts')
+        .select('slug, updated_at, published_at')
+        .eq('status', 'PUBLISHED')
+        .order('published_at', { ascending: false });
+
+      if (!error && blogs) {
+        blogUrls = blogs.map((blog) => ({
+          url: `${baseUrl}/blog/${blog.slug}`,
+          lastModified: new Date(blog.updated_at),
+          changeFrequency: 'weekly' as const,
+          priority: 0.7,
+        }));
+      }
+    } catch (error) {
+      console.error('Error fetching blogs for sitemap:', error);
+    }
+  }
 
   const staticPages = [
     {
