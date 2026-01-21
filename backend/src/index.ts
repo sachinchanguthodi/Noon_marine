@@ -18,9 +18,27 @@ const app: Application = express();
 
 // Security middleware
 app.use(helmet());
+
+// Allow both www and non-www versions of the domain
+const allowedOrigins = [
+  env.FRONTEND_URL,
+  'https://noonmarine.uk',
+  'https://www.noonmarine.uk',
+  'http://localhost:3000', // for local development
+];
+
 app.use(
   cors({
-    origin: env.FRONTEND_URL,
+    origin: (origin, callback) => {
+      // Allow requests with no origin (like mobile apps or curl requests)
+      if (!origin) return callback(null, true);
+
+      if (allowedOrigins.indexOf(origin) !== -1) {
+        callback(null, true);
+      } else {
+        callback(new Error('Not allowed by CORS'));
+      }
+    },
     credentials: true,
   })
 );
