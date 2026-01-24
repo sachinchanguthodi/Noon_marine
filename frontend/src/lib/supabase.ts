@@ -23,3 +23,23 @@ export type BlogPost = {
   created_at: string;
   updated_at: string;
 };
+
+export type MarketplaceListing = {
+  id: string;
+  title: string;
+  slug: string;
+  description: string;
+  category: 'VESSEL' | 'MACHINERY' | 'EQUIPMENT' | 'SPARE_PARTS' | 'OTHER';
+  price: number;
+  currency: string;
+  condition: 'NEW' | 'USED' | 'REFURBISHED';
+  images: string[];
+  specifications: Record<string, string>;
+  location: string;
+  status: 'DRAFT' | 'PUBLISHED' | 'SOLD' | 'ARCHIVED';
+  featured: boolean;
+  view_count: number;
+  created_at: string;
+  updated_at: string;
+  published_at?: string;
+};

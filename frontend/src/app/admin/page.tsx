@@ -27,6 +27,7 @@ import {
   Truck,
   GraduationCap,
   FileText,
+  ShoppingBag,
 } from 'lucide-react';
 
 interface ServiceRequest {
@@ -432,6 +433,13 @@ export default function AdminPage() {
             className="px-6 py-3 bg-gray-200 text-gray-700 rounded-lg font-semibold hover:bg-gray-300 transition"
           >
             ← Back to Dashboard
+          </Link>
+          <Link
+            href="/admin/marketplace"
+            className="px-6 py-3 bg-primary-600 text-white rounded-lg font-semibold hover:bg-primary-700 transition flex items-center"
+          >
+            <ShoppingBag className="h-5 w-5 mr-2" />
+            Manage Marketplace
           </Link>
         </div>
       </div>

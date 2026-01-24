@@ -27,7 +27,12 @@ import {
   Menu,
   X,
   Calendar,
-  BookOpen
+  BookOpen,
+  ShoppingBag,
+  MapPin,
+  Eye,
+  Settings,
+  Box
 } from 'lucide-react';
 
 interface BlogPost {
@@ -40,13 +45,55 @@ interface BlogPost {
   status: 'DRAFT' | 'PUBLISHED' | 'ARCHIVED';
 }
 
+interface MarketplaceListing {
+  id: string;
+  title: string;
+  slug: string;
+  description: string;
+  category: 'VESSEL' | 'MACHINERY' | 'EQUIPMENT' | 'SPARE_PARTS' | 'OTHER';
+  price: number;
+  currency: string;
+  condition: 'NEW' | 'USED' | 'REFURBISHED';
+  images: string[];
+  location: string;
+  view_count: number;
+  featured: boolean;
+  created_at: string;
+  published_at?: string;
+}
+
+const marketplaceCategories = [
+  { value: 'VESSEL', label: 'Vessels', icon: Ship },
+  { value: 'MACHINERY', label: 'Machinery', icon: Settings },
+  { value: 'EQUIPMENT', label: 'Equipment', icon: Wrench },
+  { value: 'SPARE_PARTS', label: 'Spare Parts', icon: Package },
+  { value: 'OTHER', label: 'Other', icon: Box },
+];
+
+function formatPrice(price: number, currency: string): string {
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: currency,
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  }).format(price);
+}
+
+function getCategoryIcon(category: string) {
+  const cat = marketplaceCategories.find((c) => c.value === category);
+  return cat?.icon || Box;
+}
+
 export default function HomePage() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [recentBlogs, setRecentBlogs] = useState<BlogPost[]>([]);
   const [blogsLoading, setBlogsLoading] = useState(true);
+  const [recentListings, setRecentListings] = useState<MarketplaceListing[]>([]);
+  const [listingsLoading, setListingsLoading] = useState(true);
 
   useEffect(() => {
     fetchRecentBlogs();
+    fetchRecentListings();
   }, []);
 
   const fetchRecentBlogs = async () => {
@@ -58,6 +105,18 @@ export default function HomePage() {
       console.error('Failed to fetch blogs:', error);
     } finally {
       setBlogsLoading(false);
+    }
+  };
+
+  const fetchRecentListings = async () => {
+    try {
+      const { marketplaceService } = await import('@/lib/marketplaceService');
+      const listings = await marketplaceService.getRecentPublished(4);
+      setRecentListings(listings);
+    } catch (error) {
+      console.error('Failed to fetch listings:', error);
+    } finally {
+      setListingsLoading(false);
     }
   };
 
@@ -74,11 +133,14 @@ export default function HomePage() {
 
             {/* Desktop Navigation */}
             <div className="hidden md:flex space-x-8">
+              <Link href="/marketplace" className="text-primary-600 font-medium hover:text-primary-700 transition flex items-center">
+                <ShoppingBag className="h-4 w-4 mr-1" />
+                Marketplace
+              </Link>
               <Link href="/services" className="text-gray-700 hover:text-primary-600 transition">Services</Link>
               <Link href="/logistics" className="text-gray-700 hover:text-primary-600 transition">Logistics</Link>
               <Link href="/vessels" className="text-gray-700 hover:text-primary-600 transition">Vessels</Link>
               <Link href="/blog" className="text-gray-700 hover:text-primary-600 transition">Blog</Link>
-              <Link href="/about" className="text-gray-700 hover:text-primary-600 transition">About</Link>
               <Link href="/contact" className="text-gray-700 hover:text-primary-600 transition">Contact</Link>
             </div>
 
@@ -126,6 +188,14 @@ export default function HomePage() {
             <div className="md:hidden mt-4 pb-4 border-t border-gray-200 pt-4">
               <div className="flex flex-col space-y-3">
                 <Link
+                  href="/marketplace"
+                  className="text-primary-600 font-medium transition py-2 px-2 hover:bg-primary-50 rounded flex items-center"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  <ShoppingBag className="h-4 w-4 mr-2" />
+                  Marketplace
+                </Link>
+                <Link
                   href="/services"
                   className="text-gray-700 hover:text-primary-600 transition py-2 px-2 hover:bg-gray-50 rounded"
                   onClick={() => setMobileMenuOpen(false)}
@@ -152,13 +222,6 @@ export default function HomePage() {
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   Blog
-                </Link>
-                <Link
-                  href="/about"
-                  className="text-gray-700 hover:text-primary-600 transition py-2 px-2 hover:bg-gray-50 rounded"
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  About
                 </Link>
                 <Link
                   href="/contact"
@@ -200,6 +263,106 @@ export default function HomePage() {
               </Link>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* Marketplace Preview Section */}
+      <section className="py-10 sm:py-14 bg-gradient-to-b from-white to-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-8">
+            <div className="inline-flex items-center justify-center px-4 py-2 bg-primary-100 text-primary-700 rounded-full text-sm font-medium mb-4">
+              <ShoppingBag className="h-4 w-4 mr-2" />
+              Marine Marketplace
+            </div>
+            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-3">Latest Marine Listings</h2>
+            <p className="text-sm sm:text-base text-gray-600 max-w-2xl mx-auto">
+              Explore vessels, machinery, equipment, and spare parts from trusted sellers
+            </p>
+          </div>
+
+          {listingsLoading ? (
+            <div className="text-center py-8">
+              <p className="text-gray-500">Loading listings...</p>
+            </div>
+          ) : recentListings.length === 0 ? (
+            <div className="text-center py-8">
+              <ShoppingBag className="h-12 w-12 text-gray-300 mx-auto mb-3" />
+              <p className="text-gray-500">No listings available yet. Check back soon!</p>
+            </div>
+          ) : (
+            <>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-8">
+                {recentListings.map((listing) => {
+                  const CategoryIcon = getCategoryIcon(listing.category);
+                  return (
+                    <Link
+                      key={listing.id}
+                      href={`/marketplace/${listing.slug}`}
+                      className="group bg-white rounded-xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-200 hover:border-primary-300"
+                    >
+                      <div className="relative h-40 sm:h-48 bg-gray-100">
+                        {listing.images && listing.images.length > 0 ? (
+                          <img
+                            src={listing.images[0]}
+                            alt={listing.title}
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                          />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center">
+                            <CategoryIcon className="h-12 w-12 text-gray-300" />
+                          </div>
+                        )}
+                        {listing.featured && (
+                          <span className="absolute top-2 left-2 bg-yellow-500 text-white text-xs font-bold px-2 py-1 rounded">
+                            Featured
+                          </span>
+                        )}
+                        <span className={`absolute top-2 right-2 text-xs font-bold px-2 py-1 rounded ${
+                          listing.condition === 'NEW' ? 'bg-green-500 text-white' :
+                          listing.condition === 'REFURBISHED' ? 'bg-blue-500 text-white' :
+                          'bg-gray-500 text-white'
+                        }`}>
+                          {listing.condition}
+                        </span>
+                      </div>
+                      <div className="p-4">
+                        <div className="flex items-center text-xs text-gray-500 mb-2">
+                          <CategoryIcon className="h-3 w-3 mr-1" />
+                          {marketplaceCategories.find((c) => c.value === listing.category)?.label}
+                        </div>
+                        <h3 className="font-bold text-gray-900 mb-2 line-clamp-2 group-hover:text-primary-600 transition text-sm sm:text-base">
+                          {listing.title}
+                        </h3>
+                        <p className="text-lg sm:text-xl font-bold text-primary-600 mb-2">
+                          {formatPrice(listing.price, listing.currency)}
+                        </p>
+                        <div className="flex items-center justify-between text-xs text-gray-500">
+                          <div className="flex items-center">
+                            <MapPin className="h-3 w-3 mr-1" />
+                            <span className="truncate max-w-[80px]">{listing.location}</span>
+                          </div>
+                          <div className="flex items-center">
+                            <Eye className="h-3 w-3 mr-1" />
+                            {listing.view_count}
+                          </div>
+                        </div>
+                      </div>
+                    </Link>
+                  );
+                })}
+              </div>
+
+              <div className="text-center">
+                <Link
+                  href="/marketplace"
+                  className="inline-flex items-center justify-center bg-primary-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-primary-700 transition shadow-lg"
+                >
+                  Browse All Listings
+                  <ArrowRight className="ml-2 h-5 w-5" />
+                </Link>
+              </div>
+            </>
+          )}
         </div>
       </section>
 
@@ -440,10 +603,10 @@ export default function HomePage() {
             <div>
               <h4 className="text-white font-semibold mb-4">Services</h4>
               <ul className="space-y-2 text-sm">
+                <li><Link href="/marketplace" className="hover:text-primary-400 transition">Marketplace</Link></li>
                 <li><Link href="/services" className="hover:text-primary-400 transition">Vessel Sales</Link></li>
                 <li><Link href="/services" className="hover:text-primary-400 transition">Marine Insurance</Link></li>
                 <li><Link href="/services" className="hover:text-primary-400 transition">Flag Registration</Link></li>
-                <li><Link href="/services" className="hover:text-primary-400 transition">Crew Management</Link></li>
               </ul>
             </div>
             <div>
@@ -460,7 +623,7 @@ export default function HomePage() {
               <ul className="space-y-2 text-sm">
                 <li>Dubai Maritime City, UAE</li>
                 <li>Phone: +971 50 100 1882</li>
-                <li>Email: info@noonmarine.com</li>
+                <li>Email: info@noonmarine.uk</li>
               </ul>
             </div>
           </div>
