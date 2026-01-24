@@ -199,10 +199,3 @@ Key entities:
 
 Documentation for deployment to production environments will be added in future phases.
 
-## Support
-
-For support and questions, contact: info@rahnamaholding.com
-
-## License
-
-Proprietary - Rahnama Holding Company
