@@ -131,7 +131,7 @@ export default function MarketplacePage() {
         <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 sm:py-4">
           <div className="flex justify-between items-center">
             <Link href="/" className="flex items-center space-x-2">
-              <Anchor className="h-6 w-6 sm:h-8 sm:w-8 text-primary-600" />
+              <img src="/logo.jpg" alt="Noon Marine" className="h-8 sm:h-10 w-auto" />
               <span className="text-lg sm:text-2xl font-bold text-primary-900">Noon Marine</span>
             </Link>
 
@@ -370,7 +370,7 @@ export default function MarketplacePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <div className="flex items-center justify-center space-x-2 mb-4">
-              <Anchor className="h-6 w-6 text-primary-400" />
+              <img src="/logo.jpg" alt="Noon Marine" className="h-8 w-auto" />
               <span className="text-xl font-bold text-white">Noon Marine</span>
             </div>
             <p className="text-sm mb-4">

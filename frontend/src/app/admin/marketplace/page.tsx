@@ -323,7 +323,7 @@ export default function AdminMarketplacePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-4">
             <Link href="/" className="flex items-center space-x-2">
-              <Anchor className="h-8 w-8 text-primary-600" />
+              <img src="/logo.jpg" alt="Noon Marine" className="h-10 w-auto" />
               <span className="text-2xl font-bold text-primary-900">Noon Marine - Marketplace Admin</span>
             </Link>
             <div className="flex items-center space-x-4">
