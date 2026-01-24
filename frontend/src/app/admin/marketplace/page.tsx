@@ -258,7 +258,7 @@ export default function AdminMarketplacePage() {
   };
 
   const addImage = () => {
-    if (newImageUrl) {
+    if (newImageUrl && (formData.images?.length || 0) < 10) {
       setFormData({
         ...formData,
         images: [...(formData.images || []), newImageUrl],
@@ -753,35 +753,53 @@ export default function AdminMarketplacePage() {
 
               {/* Images */}
               <div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Images</h3>
-                <div className="flex gap-2 mb-4">
-                  <input
-                    type="url"
-                    value={newImageUrl}
-                    onChange={(e) => setNewImageUrl(e.target.value)}
-                    className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                    placeholder="Enter image URL"
-                  />
-                  <button
-                    onClick={addImage}
-                    className="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700"
-                  >
-                    <Plus className="h-5 w-5" />
-                  </button>
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-lg font-semibold text-gray-900">Images</h3>
+                  <span className={`text-sm ${(formData.images?.length || 0) >= 10 ? 'text-red-600' : 'text-gray-500'}`}>
+                    {formData.images?.length || 0}/10 images
+                  </span>
                 </div>
-                {formData.images && formData.images.length > 0 && (
-                  <div className="grid grid-cols-4 gap-4">
+                {(formData.images?.length || 0) < 10 && (
+                  <div className="flex gap-2 mb-4">
+                    <input
+                      type="url"
+                      value={newImageUrl}
+                      onChange={(e) => setNewImageUrl(e.target.value)}
+                      className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                      placeholder="Enter image URL (e.g., https://example.com/image.jpg)"
+                    />
+                    <button
+                      onClick={addImage}
+                      disabled={!newImageUrl}
+                      className="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      <Plus className="h-5 w-5" />
+                    </button>
+                  </div>
+                )}
+                {(formData.images?.length || 0) >= 10 && (
+                  <p className="text-sm text-red-600 mb-4">Maximum 10 images allowed. Remove an image to add more.</p>
+                )}
+                {formData.images && formData.images.length > 0 ? (
+                  <div className="grid grid-cols-5 gap-3">
                     {formData.images.map((img, index) => (
                       <div key={index} className="relative group">
-                        <img src={img} alt="" className="w-full h-24 object-cover rounded-lg" />
+                        <img src={img} alt={`Image ${index + 1}`} className="w-full h-24 object-cover rounded-lg border border-gray-200" />
+                        <div className="absolute top-1 left-1 bg-black/50 text-white text-xs px-1.5 py-0.5 rounded">
+                          {index + 1}
+                        </div>
                         <button
                           onClick={() => removeImage(index)}
                           className="absolute top-1 right-1 p-1 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition"
                         >
-                          <X className="h-4 w-4" />
+                          <X className="h-3 w-3" />
                         </button>
                       </div>
                     ))}
+                  </div>
+                ) : (
+                  <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center">
+                    <p className="text-gray-500">No images added yet. Add up to 10 image URLs.</p>
                   </div>
                 )}
               </div>

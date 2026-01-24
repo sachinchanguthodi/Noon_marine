@@ -622,7 +622,6 @@ export default function HomePage() {
               <h4 className="text-white font-semibold mb-4">Contact</h4>
               <ul className="space-y-2 text-sm">
                 <li>Dubai Maritime City, UAE</li>
-                <li>Phone: +971 50 100 1882</li>
                 <li>Email: info@noonmarine.uk</li>
               </ul>
             </div>
