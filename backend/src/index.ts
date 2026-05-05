@@ -24,7 +24,9 @@ const allowedOrigins = [
   env.FRONTEND_URL,
   'https://noonmarine.uk',
   'https://www.noonmarine.uk',
-  'http://localhost:3000', // for local development
+  'https://noonmarine.com',
+  'https://www.noonmarine.com',
+  'http://localhost:3000',
 ];
 
 app.use(

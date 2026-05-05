@@ -120,7 +120,7 @@ export default function ListingDetailPage() {
         `Message:\n${inquiryForm.message}`
       );
 
-      window.location.href = `mailto:info@noonmarine.uk?subject=${subject}&body=${body}`;
+      window.location.href = `mailto:info@noonmarine.com?subject=${subject}&body=${body}`;
       setSubmitted(true);
     } catch (error) {
       console.error('Failed to submit inquiry:', error);
@@ -437,8 +437,8 @@ export default function ListingDetailPage() {
 
                   <p className="text-xs text-gray-500 text-center">
                     Or email us directly at{' '}
-                    <a href="mailto:info@noonmarine.uk" className="text-primary-600 hover:underline">
-                      info@noonmarine.uk
+                    <a href="mailto:info@noonmarine.com" className="text-primary-600 hover:underline">
+                      info@noonmarine.com
                     </a>
                   </p>
                 </form>

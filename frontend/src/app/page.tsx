@@ -620,7 +620,7 @@ export default function HomePage() {
               <h4 className="text-white font-semibold mb-4">Contact</h4>
               <ul className="space-y-2 text-sm">
                 <li>Dubai Maritime City, UAE</li>
-                <li>Email: info@noonmarine.uk</li>
+                <li>Email: info@noonmarine.com</li>
               </ul>
             </div>
           </div>
