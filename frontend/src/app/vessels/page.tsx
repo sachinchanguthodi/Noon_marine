@@ -1,28 +1,28 @@
-import Link from 'next/link';
-import { Anchor, Ship, Search, Filter, MapPin, DollarSign, Calendar, ArrowRight } from 'lucide-react';
+﻿import Link from 'next/link';
+import Image from 'next/image';
+import { Ship, Search, Filter, MapPin, DollarSign, Calendar, ArrowRight } from 'lucide-react';
 import Footer from '@/components/Footer';
 
 export default function VesselsPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <header className="bg-white shadow-sm sticky top-0 z-50">
-        <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+      <header className="bg-gray-900">
+        <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2">
           <div className="flex justify-between items-center">
-            <Link href="/" className="flex items-center space-x-2">
-              <Anchor className="h-8 w-8 text-primary-600" />
-              <span className="text-2xl font-bold text-primary-900">Noon Marine</span>
+            <Link href="/" className="flex items-center">
+              <Image src="/logo.png" alt="Noon Marine" width={110} height={42} className="object-contain" />
             </Link>
             <div className="hidden md:flex space-x-8">
-              <Link href="/" className="text-gray-700 hover:text-primary-600 transition">Home</Link>
-              <Link href="/services" className="text-gray-700 hover:text-primary-600 transition">Services</Link>
-              <Link href="/logistics" className="text-gray-700 hover:text-primary-600 transition">Logistics</Link>
-              <Link href="/vessels" className="text-primary-600 font-medium">Vessels</Link>
-              <Link href="/about" className="text-gray-700 hover:text-primary-600 transition">About</Link>
-              <Link href="/contact" className="text-gray-700 hover:text-primary-600 transition">Contact</Link>
+              <Link href="/" className="text-gray-300 hover:text-white transition">Home</Link>
+              <Link href="/services" className="text-gray-300 hover:text-white transition">Services</Link>
+              <Link href="/logistics" className="text-gray-300 hover:text-white transition">Logistics</Link>
+              <Link href="/vessels" className="text-white font-medium">Vessels</Link>
+              <Link href="/about" className="text-gray-300 hover:text-white transition">About</Link>
+              <Link href="/contact" className="text-gray-300 hover:text-white transition">Contact</Link>
             </div>
             <div className="flex items-center space-x-4">
-              <Link href="/login" className="px-4 py-2 text-primary-600 hover:text-primary-700 font-medium transition">
+              <Link href="/login" className="px-4 py-2 text-gray-300 hover:text-white font-medium transition">
                 Sign In
               </Link>
               <Link href="/register" className="px-6 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition font-medium">
@@ -237,3 +237,4 @@ const vessels = [
     image: 'https://images.unsplash.com/photo-1606925797300-0b35e9d1794e?auto=format&fit=crop&w=800&q=80',
   },
 ];
+

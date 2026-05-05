@@ -1,6 +1,7 @@
-'use client';
+﻿'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { useState, useEffect } from 'react';
 import {
   Ship,
@@ -12,7 +13,6 @@ import {
   Truck,
   GraduationCap,
   FileText,
-  Anchor,
   ArrowRight,
   CheckCircle2,
   Globe,
@@ -123,32 +123,31 @@ export default function HomePage() {
   return (
     <div className="min-h-screen">
       {/* Header */}
-      <header className="bg-white shadow-sm sticky top-0 z-50">
-        <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 sm:py-4">
+      <header className="bg-gray-900">
+        <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2">
           <div className="flex justify-between items-center">
-            <Link href="/" className="flex items-center space-x-2">
-              <Anchor className="h-6 w-6 sm:h-8 sm:w-8 text-primary-600" />
-              <span className="text-lg sm:text-2xl font-bold text-primary-900">Noon Marine</span>
+            <Link href="/" className="flex items-center">
+              <Image src="/logo.png" alt="Noon Marine" width={110} height={42} className="object-contain" />
             </Link>
 
             {/* Desktop Navigation */}
             <div className="hidden md:flex space-x-8">
-              <Link href="/marketplace" className="text-primary-600 font-medium hover:text-primary-700 transition flex items-center">
+              <Link href="/marketplace" className="text-white font-medium hover:text-primary-400 transition flex items-center">
                 <ShoppingBag className="h-4 w-4 mr-1" />
                 Marketplace
               </Link>
-              <Link href="/services" className="text-gray-700 hover:text-primary-600 transition">Services</Link>
-              <Link href="/logistics" className="text-gray-700 hover:text-primary-600 transition">Logistics</Link>
-              <Link href="/vessels" className="text-gray-700 hover:text-primary-600 transition">Vessels</Link>
-              <Link href="/blog" className="text-gray-700 hover:text-primary-600 transition">Blog</Link>
-              <Link href="/contact" className="text-gray-700 hover:text-primary-600 transition">Contact</Link>
+              <Link href="/services" className="text-gray-300 hover:text-white transition">Services</Link>
+              <Link href="/logistics" className="text-gray-300 hover:text-white transition">Logistics</Link>
+              <Link href="/vessels" className="text-gray-300 hover:text-white transition">Vessels</Link>
+              <Link href="/blog" className="text-gray-300 hover:text-white transition">Blog</Link>
+              <Link href="/contact" className="text-gray-300 hover:text-white transition">Contact</Link>
             </div>
 
             {/* Desktop Auth Buttons */}
             <div className="hidden md:flex items-center space-x-4">
               <Link
                 href="/login"
-                className="px-4 py-2 text-primary-600 hover:text-primary-700 font-medium transition"
+                className="px-4 py-2 text-gray-300 hover:text-white font-medium transition"
               >
                 Sign In
               </Link>
@@ -164,7 +163,7 @@ export default function HomePage() {
             <div className="md:hidden flex items-center space-x-2">
               <Link
                 href="/login"
-                className="px-2 py-1.5 text-xs text-primary-600 hover:text-primary-700 font-medium transition"
+                className="px-2 py-1.5 text-xs text-gray-300 hover:text-white font-medium transition"
               >
                 Sign In
               </Link>
@@ -176,7 +175,7 @@ export default function HomePage() {
               </Link>
               <button
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="p-2 text-gray-700 hover:text-primary-600 transition"
+                className="p-2 text-gray-300 hover:text-white transition"
               >
                 {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
               </button>
@@ -185,11 +184,11 @@ export default function HomePage() {
 
           {/* Mobile Navigation Menu */}
           {mobileMenuOpen && (
-            <div className="md:hidden mt-4 pb-4 border-t border-gray-200 pt-4">
+            <div className="md:hidden mt-4 pb-4 border-t border-gray-700 pt-4">
               <div className="flex flex-col space-y-3">
                 <Link
                   href="/marketplace"
-                  className="text-primary-600 font-medium transition py-2 px-2 hover:bg-primary-50 rounded flex items-center"
+                  className="text-white font-medium transition py-2 px-2 hover:bg-gray-800 rounded flex items-center"
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   <ShoppingBag className="h-4 w-4 mr-2" />
@@ -197,35 +196,35 @@ export default function HomePage() {
                 </Link>
                 <Link
                   href="/services"
-                  className="text-gray-700 hover:text-primary-600 transition py-2 px-2 hover:bg-gray-50 rounded"
+                  className="text-gray-300 hover:text-white transition py-2 px-2 hover:bg-gray-800 rounded"
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   Services
                 </Link>
                 <Link
                   href="/logistics"
-                  className="text-gray-700 hover:text-primary-600 transition py-2 px-2 hover:bg-gray-50 rounded"
+                  className="text-gray-300 hover:text-white transition py-2 px-2 hover:bg-gray-800 rounded"
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   Logistics
                 </Link>
                 <Link
                   href="/vessels"
-                  className="text-gray-700 hover:text-primary-600 transition py-2 px-2 hover:bg-gray-50 rounded"
+                  className="text-gray-300 hover:text-white transition py-2 px-2 hover:bg-gray-800 rounded"
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   Vessels
                 </Link>
                 <Link
                   href="/blog"
-                  className="text-gray-700 hover:text-primary-600 transition py-2 px-2 hover:bg-gray-50 rounded"
+                  className="text-gray-300 hover:text-white transition py-2 px-2 hover:bg-gray-800 rounded"
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   Blog
                 </Link>
                 <Link
                   href="/contact"
-                  className="text-gray-700 hover:text-primary-600 transition py-2 px-2 hover:bg-gray-50 rounded"
+                  className="text-gray-300 hover:text-white transition py-2 px-2 hover:bg-gray-800 rounded"
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   Contact
@@ -576,7 +575,7 @@ export default function HomePage() {
               Contact Sales
             </Link>
           </div>
-          <p className="mt-6 text-primary-200">No credit card required • Free forever • Setup in minutes</p>
+          <p className="mt-6 text-primary-200">No credit card required â€¢ Free forever â€¢ Setup in minutes</p>
         </div>
       </section>
 
@@ -592,9 +591,8 @@ export default function HomePage() {
         <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div>
-              <div className="flex items-center space-x-2 mb-4">
-                <Anchor className="h-6 w-6 text-primary-400" />
-                <span className="text-xl font-bold text-white">Noon Marine</span>
+              <div className="flex items-center mb-4">
+                <Image src="/logo.png" alt="Noon Marine" width={130} height={52} className="object-contain" />
               </div>
               <p className="text-sm">
                 Your trusted partner for comprehensive maritime solutions across the UAE, GCC, Africa, and Asia.
@@ -721,3 +719,4 @@ const benefits = [
     description: 'Connected with leading classification societies, insurance providers, and maritime authorities worldwide.',
   },
 ];
+

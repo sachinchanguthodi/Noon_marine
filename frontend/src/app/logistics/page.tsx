@@ -1,9 +1,9 @@
-'use client';
+﻿'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { useState } from 'react';
 import {
-  Anchor,
   Ship,
   Package,
   TrendingUp,
@@ -278,24 +278,23 @@ export default function LogisticsPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <header className="bg-white shadow-sm sticky top-0 z-50">
-        <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+      <header className="bg-gray-900">
+        <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2">
           <div className="flex justify-between items-center">
-            <Link href="/" className="flex items-center space-x-2">
-              <Anchor className="h-8 w-8 text-primary-600" />
-              <span className="text-2xl font-bold text-primary-900">Noon Marine</span>
+            <Link href="/" className="flex items-center">
+              <Image src="/logo.png" alt="Noon Marine" width={110} height={42} className="object-contain" />
             </Link>
             <div className="hidden md:flex space-x-8">
-              <Link href="/" className="text-gray-700 hover:text-primary-600 transition">Home</Link>
-              <Link href="/services" className="text-gray-700 hover:text-primary-600 transition">Services</Link>
-              <Link href="/logistics" className="text-primary-600 font-medium">Logistics</Link>
-              <Link href="/vessels" className="text-gray-700 hover:text-primary-600 transition">Vessels</Link>
-              <Link href="/contact" className="text-gray-700 hover:text-primary-600 transition">Contact</Link>
+              <Link href="/" className="text-gray-300 hover:text-white transition">Home</Link>
+              <Link href="/services" className="text-gray-300 hover:text-white transition">Services</Link>
+              <Link href="/logistics" className="text-white font-medium">Logistics</Link>
+              <Link href="/vessels" className="text-gray-300 hover:text-white transition">Vessels</Link>
+              <Link href="/contact" className="text-gray-300 hover:text-white transition">Contact</Link>
             </div>
             <div className="flex items-center space-x-4">
               <Link
                 href="/login"
-                className="px-4 py-2 text-primary-600 hover:text-primary-700 font-medium transition"
+                className="px-4 py-2 text-gray-300 hover:text-white font-medium transition"
               >
                 Sign In
               </Link>
@@ -591,9 +590,8 @@ export default function LogisticsPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div>
-              <div className="flex items-center space-x-2 mb-4">
-                <Anchor className="h-6 w-6 text-primary-400" />
-                <span className="text-xl font-bold text-white">Noon Marine</span>
+              <div className="flex items-center mb-4">
+                <Image src="/logo.png" alt="Noon Marine" width={130} height={52} className="object-contain" />
               </div>
               <p className="text-sm">
                 Your trusted partner for maritime logistics and shipping solutions.
@@ -927,3 +925,4 @@ const industrySolutions = [
     description: 'Temperature-controlled transport and storage for perishables, pharma, and sensitive cargo.',
   },
 ];
+

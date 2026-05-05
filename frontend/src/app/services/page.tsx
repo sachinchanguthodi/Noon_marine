@@ -1,4 +1,5 @@
-import Link from 'next/link';
+﻿import Link from 'next/link';
+import Image from 'next/image';
 import {
   Ship,
   Shield,
@@ -9,7 +10,6 @@ import {
   Truck,
   GraduationCap,
   FileText,
-  Anchor,
   ArrowRight,
   CheckCircle2,
   ClipboardCheck,
@@ -26,25 +26,24 @@ export default function ServicesPage() {
   return (
     <div className="min-h-screen">
       {/* Header */}
-      <header className="bg-white shadow-sm sticky top-0 z-50">
-        <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+      <header className="bg-gray-900">
+        <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2">
           <div className="flex justify-between items-center">
-            <Link href="/" className="flex items-center space-x-2">
-              <Anchor className="h-8 w-8 text-primary-600" />
-              <span className="text-2xl font-bold text-primary-900">Noon Marine</span>
+            <Link href="/" className="flex items-center">
+              <Image src="/logo.png" alt="Noon Marine" width={110} height={42} className="object-contain" />
             </Link>
             <div className="hidden md:flex space-x-8">
-              <Link href="/" className="text-gray-700 hover:text-primary-600">Home</Link>
-              <Link href="/services" className="text-primary-600 font-medium">Services</Link>
-              <Link href="/logistics" className="text-gray-700 hover:text-primary-600">Logistics</Link>
-              <Link href="/vessels" className="text-gray-700 hover:text-primary-600">Vessels</Link>
-              <Link href="/about" className="text-gray-700 hover:text-primary-600">About</Link>
-              <Link href="/contact" className="text-gray-700 hover:text-primary-600">Contact</Link>
+              <Link href="/" className="text-gray-300 hover:text-white">Home</Link>
+              <Link href="/services" className="text-white font-medium">Services</Link>
+              <Link href="/logistics" className="text-gray-300 hover:text-white">Logistics</Link>
+              <Link href="/vessels" className="text-gray-300 hover:text-white">Vessels</Link>
+              <Link href="/about" className="text-gray-300 hover:text-white">About</Link>
+              <Link href="/contact" className="text-gray-300 hover:text-white">Contact</Link>
             </div>
             <div className="flex space-x-4">
               <Link
                 href="/login"
-                className="text-primary-600 hover:text-primary-700 font-medium"
+                className="text-gray-300 hover:text-white font-medium"
               >
                 Sign In
               </Link>
@@ -462,3 +461,4 @@ const serviceCategories = [
     ],
   },
 ];
+

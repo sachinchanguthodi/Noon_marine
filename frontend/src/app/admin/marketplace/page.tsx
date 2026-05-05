@@ -1,9 +1,9 @@
-'use client';
+﻿'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { useState, useEffect } from 'react';
 import {
-  Anchor,
   Bell,
   RefreshCw,
   Eye,
@@ -319,23 +319,22 @@ export default function AdminMarketplacePage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <header className="bg-white shadow-sm sticky top-0 z-50 border-b border-gray-200">
+      <header className="bg-gray-900 border-b border-gray-700">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center py-4">
-            <Link href="/" className="flex items-center space-x-2">
-              <Anchor className="h-8 w-8 text-primary-600" />
-              <span className="text-2xl font-bold text-primary-900">Noon Marine - Marketplace Admin</span>
+          <div className="flex justify-between items-center py-2">
+            <Link href="/" className="flex items-center">
+              <Image src="/logo.png" alt="Noon Marine" width={110} height={42} className="object-contain" />
             </Link>
             <div className="flex items-center space-x-4">
-              <button className="p-2 text-gray-600 hover:text-primary-600 transition relative">
+              <button className="p-2 text-gray-300 hover:text-white transition relative">
                 <Bell className="h-6 w-6" />
               </button>
-              <div className="flex items-center space-x-3 border-l pl-4">
+              <div className="flex items-center space-x-3 border-l border-gray-700 pl-4">
                 <div className="text-right">
-                  <div className="text-sm font-medium text-gray-900">
+                  <div className="text-sm font-medium text-white">
                     {user ? `${user.firstName} ${user.lastName}` : 'Admin'}
                   </div>
-                  <div className="text-xs text-primary-600 font-semibold">
+                  <div className="text-xs text-primary-400 font-semibold">
                     {user?.role?.replace('_', ' ')}
                   </div>
                 </div>
@@ -889,3 +888,4 @@ export default function AdminMarketplacePage() {
     </div>
   );
 }
+

@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { Anchor } from 'lucide-react';
+import Image from 'next/image';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
 
@@ -48,9 +48,8 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
-        <Link href="/" className="flex justify-center items-center space-x-2">
-          <Anchor className="h-12 w-12 text-primary-600" />
-          <span className="text-3xl font-bold text-primary-900">Noon Marine</span>
+        <Link href="/" className="flex justify-center items-center">
+          <Image src="/logo.png" alt="Noon Marine" width={180} height={70} className="object-contain" />
         </Link>
         <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
           Sign in to your account

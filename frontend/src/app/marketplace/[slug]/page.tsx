@@ -3,8 +3,8 @@
 import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
+import Image from 'next/image';
 import {
-  Anchor,
   Ship,
   Wrench,
   Package,
@@ -147,25 +147,24 @@ export default function ListingDetailPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <header className="bg-white shadow-sm sticky top-0 z-50">
-        <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 sm:py-4">
+      <header className="bg-gray-900">
+        <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2">
           <div className="flex justify-between items-center">
-            <Link href="/" className="flex items-center space-x-2">
-              <Anchor className="h-6 w-6 sm:h-8 sm:w-8 text-primary-600" />
-              <span className="text-lg sm:text-2xl font-bold text-primary-900">Noon Marine</span>
+            <Link href="/" className="flex items-center">
+              <Image src="/logo.png" alt="Noon Marine" width={110} height={42} className="object-contain" />
             </Link>
 
             <div className="hidden md:flex space-x-8">
-              <Link href="/marketplace" className="text-primary-600 font-medium">Marketplace</Link>
-              <Link href="/services" className="text-gray-700 hover:text-primary-600 transition">Services</Link>
-              <Link href="/logistics" className="text-gray-700 hover:text-primary-600 transition">Logistics</Link>
-              <Link href="/vessels" className="text-gray-700 hover:text-primary-600 transition">Vessels</Link>
-              <Link href="/blog" className="text-gray-700 hover:text-primary-600 transition">Blog</Link>
-              <Link href="/contact" className="text-gray-700 hover:text-primary-600 transition">Contact</Link>
+              <Link href="/marketplace" className="text-white font-medium">Marketplace</Link>
+              <Link href="/services" className="text-gray-300 hover:text-white transition">Services</Link>
+              <Link href="/logistics" className="text-gray-300 hover:text-white transition">Logistics</Link>
+              <Link href="/vessels" className="text-gray-300 hover:text-white transition">Vessels</Link>
+              <Link href="/blog" className="text-gray-300 hover:text-white transition">Blog</Link>
+              <Link href="/contact" className="text-gray-300 hover:text-white transition">Contact</Link>
             </div>
 
             <div className="hidden md:flex items-center space-x-4">
-              <Link href="/login" className="px-4 py-2 text-primary-600 hover:text-primary-700 font-medium transition">
+              <Link href="/login" className="px-4 py-2 text-gray-300 hover:text-white font-medium transition">
                 Sign In
               </Link>
               <Link href="/register" className="px-6 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition font-medium">
@@ -175,19 +174,19 @@ export default function ListingDetailPage() {
 
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden p-2 text-gray-700 hover:text-primary-600 transition"
+              className="md:hidden p-2 text-gray-300 hover:text-white transition"
             >
               {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
             </button>
           </div>
 
           {mobileMenuOpen && (
-            <div className="md:hidden mt-4 pb-4 border-t border-gray-200 pt-4">
+            <div className="md:hidden mt-4 pb-4 border-t border-gray-700 pt-4">
               <div className="flex flex-col space-y-3">
-                <Link href="/marketplace" className="text-primary-600 font-medium py-2 px-2" onClick={() => setMobileMenuOpen(false)}>Marketplace</Link>
-                <Link href="/services" className="text-gray-700 hover:text-primary-600 py-2 px-2" onClick={() => setMobileMenuOpen(false)}>Services</Link>
-                <Link href="/logistics" className="text-gray-700 hover:text-primary-600 py-2 px-2" onClick={() => setMobileMenuOpen(false)}>Logistics</Link>
-                <Link href="/vessels" className="text-gray-700 hover:text-primary-600 py-2 px-2" onClick={() => setMobileMenuOpen(false)}>Vessels</Link>
+                <Link href="/marketplace" className="text-white font-medium py-2 px-2" onClick={() => setMobileMenuOpen(false)}>Marketplace</Link>
+                <Link href="/services" className="text-gray-300 hover:text-white py-2 px-2" onClick={() => setMobileMenuOpen(false)}>Services</Link>
+                <Link href="/logistics" className="text-gray-300 hover:text-white py-2 px-2" onClick={() => setMobileMenuOpen(false)}>Logistics</Link>
+                <Link href="/vessels" className="text-gray-300 hover:text-white py-2 px-2" onClick={() => setMobileMenuOpen(false)}>Vessels</Link>
                 <Link href="/blog" className="text-gray-700 hover:text-primary-600 py-2 px-2" onClick={() => setMobileMenuOpen(false)}>Blog</Link>
                 <Link href="/contact" className="text-gray-700 hover:text-primary-600 py-2 px-2" onClick={() => setMobileMenuOpen(false)}>Contact</Link>
               </div>
@@ -465,9 +464,8 @@ export default function ListingDetailPage() {
       <footer className="bg-gray-900 text-gray-300 py-12 mt-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <div className="flex items-center justify-center space-x-2 mb-4">
-              <Anchor className="h-6 w-6 text-primary-400" />
-              <span className="text-xl font-bold text-white">Noon Marine</span>
+            <div className="flex items-center justify-center mb-4">
+              <Image src="/logo.png" alt="Noon Marine" width={130} height={52} className="object-contain" />
             </div>
             <p className="text-sm">
               &copy; {new Date().getFullYear()} Noon Marine Services. All rights reserved.

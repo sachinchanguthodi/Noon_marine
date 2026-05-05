@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Anchor } from 'lucide-react';
+import Image from 'next/image';
 
 export default function Footer() {
   return (
@@ -14,9 +14,8 @@ export default function Footer() {
       <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div>
-            <div className="flex items-center space-x-2 mb-4">
-              <Anchor className="h-6 w-6 text-primary-400" />
-              <span className="text-xl font-bold text-white">Noon Marine</span>
+            <div className="flex items-center mb-4">
+              <Image src="/logo.png" alt="Noon Marine" width={130} height={52} className="object-contain" />
             </div>
             <p className="text-sm">
               Your trusted partner for comprehensive maritime solutions across the UAE, GCC, Africa, and Asia.

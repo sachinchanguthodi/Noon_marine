@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { Anchor } from 'lucide-react';
+import Image from 'next/image';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
 
@@ -76,9 +76,8 @@ export default function RegisterPage() {
       <div className="flex-1 flex flex-col justify-center py-12 px-4 sm:px-6 lg:px-20 xl:px-24">
         <div className="mx-auto w-full max-w-sm lg:w-96">
           <div>
-            <Link href="/" className="flex items-center space-x-2">
-              <Anchor className="h-10 w-10 text-primary-600" />
-              <span className="text-2xl font-bold text-primary-900">Noon Marine</span>
+            <Link href="/" className="flex items-center">
+              <Image src="/logo.png" alt="Noon Marine" width={150} height={58} className="object-contain" />
             </Link>
             <h2 className="mt-6 text-3xl font-extrabold text-gray-900">
               Create your account
