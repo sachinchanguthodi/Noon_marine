@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Ship,
   Shield,
@@ -713,7 +713,8 @@ function RequestsTab() {
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
               {filteredRequests.map((request) => (
-                <tr key={request.id} className="hover:bg-gray-50">
+                <React.Fragment key={request.id}>
+                <tr className="hover:bg-gray-50">
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center">
                       <div className="bg-primary-100 p-2 rounded-lg mr-3">
@@ -807,7 +808,7 @@ function RequestsTab() {
                     </td>
                   </tr>
                 )}
-              </>
+                </React.Fragment>
               ))}
             </tbody>
           </table>
