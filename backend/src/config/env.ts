@@ -13,10 +13,7 @@ interface EnvConfig {
   MAX_FILE_SIZE: number;
   DEFAULT_PAGE_SIZE: number;
   MAX_PAGE_SIZE: number;
-  SMTP_HOST?: string;
-  SMTP_PORT?: number;
-  SMTP_USER?: string;
-  SMTP_PASS?: string;
+  RESEND_API_KEY?: string;
   EMAIL_FROM?: string;
 }
 
@@ -31,10 +28,7 @@ const env: EnvConfig = {
   MAX_FILE_SIZE: parseInt(process.env.MAX_FILE_SIZE || '10485760', 10),
   DEFAULT_PAGE_SIZE: parseInt(process.env.DEFAULT_PAGE_SIZE || '20', 10),
   MAX_PAGE_SIZE: parseInt(process.env.MAX_PAGE_SIZE || '100', 10),
-  SMTP_HOST: process.env.SMTP_HOST,
-  SMTP_PORT: process.env.SMTP_PORT ? parseInt(process.env.SMTP_PORT, 10) : undefined,
-  SMTP_USER: process.env.SMTP_USER,
-  SMTP_PASS: process.env.SMTP_PASS,
+  RESEND_API_KEY: process.env.RESEND_API_KEY,
   EMAIL_FROM: process.env.EMAIL_FROM,
 };
 
