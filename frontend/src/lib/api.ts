@@ -99,7 +99,20 @@ export const vesselsService = {
 
 export const adminService = {
   getUsers: () => api.get('/auth/admin/users'),
-  sendVerificationEmail: () => api.post('/auth/send-verification'),
+  // Email sending runs on Next.js / Vercel (has RESEND_API_KEY)
+  sendVerificationEmail: async (firstName?: string) => {
+    const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
+    const res = await fetch('/api/email/send-verification', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      },
+      body: JSON.stringify({ firstName }),
+    });
+    if (!res.ok) throw new Error(await res.text());
+    return res.json();
+  },
   verifyEmail: (token: string) => api.get('/auth/verify-email', { params: { token } }),
 };
 

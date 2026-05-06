@@ -58,7 +58,7 @@ export default function DashboardPage() {
     setSendingVerification(true);
     try {
       const { adminService } = await import('@/lib/api');
-      await adminService.sendVerificationEmail();
+      await adminService.sendVerificationEmail(user?.firstName);
       setVerificationSent(true);
     } catch (err) {
       alert('Failed to send verification email. Please try again.');

@@ -66,27 +66,13 @@ export const register = async (req: Request, res: Response) => {
       role: user.role,
     });
 
-    // Send verification email fully decoupled from response
-    setImmediate(() => {
-      const verificationToken = jwt.sign(
-        { id: user.id, email: user.email, purpose: 'email_verification' },
-        env.JWT_SECRET,
-        { expiresIn: '24h' }
-      );
-      const verificationUrl = `${env.FRONTEND_URL}/verify-email?token=${verificationToken}`;
-      if (env.NODE_ENV === 'development') {
-        console.log(`\n[DEV] Email verification link for ${user.email}:\n${verificationUrl}\n`);
-      }
-      sendVerificationEmail(user.email, user.firstName, verificationToken).catch(console.error);
-    });
-
     sendSuccess(
       res,
       {
         user,
         token,
       },
-      'Registration successful. Please check your email to verify your account.',
+      'Registration successful',
       201
     );
   } catch (error: any) {

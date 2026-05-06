@@ -54,11 +54,19 @@ export default function RegisterPage() {
       const data = await response.json();
 
       if (response.ok) {
-        // Store token
         localStorage.setItem('token', data.data.token);
         localStorage.setItem('user', JSON.stringify(data.data.user));
 
-        // Redirect to dashboard
+        // Send verification email via Next.js API route (non-blocking)
+        fetch('/api/email/send-verification', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${data.data.token}`,
+          },
+          body: JSON.stringify({ firstName: formData.firstName }),
+        }).catch(() => {});
+
         window.location.href = '/dashboard';
       } else {
         setError(data.message || 'Registration failed');
