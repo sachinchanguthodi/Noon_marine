@@ -426,20 +426,36 @@ export default function AdminPage() {
         </div>
 
         {/* Quick Actions */}
-        <div className="mt-6 flex justify-between items-center">
+        <div className="mt-6 flex flex-wrap justify-between items-center gap-3">
           <Link
             href="/dashboard"
             className="px-6 py-3 bg-gray-200 text-gray-700 rounded-lg font-semibold hover:bg-gray-300 transition"
           >
-            â† Back to Dashboard
+            Back to Dashboard
           </Link>
-          <Link
-            href="/admin/marketplace"
-            className="px-6 py-3 bg-primary-600 text-white rounded-lg font-semibold hover:bg-primary-700 transition flex items-center"
-          >
-            <ShoppingBag className="h-5 w-5 mr-2" />
-            Manage Marketplace
-          </Link>
+          <div className="flex flex-wrap gap-3">
+            <Link
+              href="/admin/users"
+              className="px-5 py-3 bg-purple-600 text-white rounded-lg font-semibold hover:bg-purple-700 transition flex items-center"
+            >
+              <Users className="h-5 w-5 mr-2" />
+              Users
+            </Link>
+            <Link
+              href="/admin/payments"
+              className="px-5 py-3 bg-green-600 text-white rounded-lg font-semibold hover:bg-green-700 transition flex items-center"
+            >
+              <Shield className="h-5 w-5 mr-2" />
+              Payment Methods
+            </Link>
+            <Link
+              href="/admin/marketplace"
+              className="px-5 py-3 bg-primary-600 text-white rounded-lg font-semibold hover:bg-primary-700 transition flex items-center"
+            >
+              <ShoppingBag className="h-5 w-5 mr-2" />
+              Marketplace
+            </Link>
+          </div>
         </div>
       </div>
 

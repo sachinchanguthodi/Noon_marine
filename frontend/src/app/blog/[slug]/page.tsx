@@ -111,10 +111,11 @@ export default function BlogDetailPage() {
             <div className="flex items-center gap-4 text-sm text-blue-100 mb-4">
               <span className="flex items-center gap-1">
                 <Calendar size={16} />
-                {new Date(blog.published_at!).toLocaleDateString('en-US', {
+                {new Date(blog.published_at || blog.created_at).toLocaleDateString('en-US', {
                   month: 'long',
                   day: 'numeric',
                   year: 'numeric',
+                  timeZone: 'UTC',
                 })}
               </span>
               <span className="flex items-center gap-1">
@@ -133,18 +134,8 @@ export default function BlogDetailPage() {
         </div>
 
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          {blog.featured_image && (
-            <div className="mb-8 rounded-lg overflow-hidden shadow-lg">
-              <img
-                src={blog.featured_image}
-                alt={blog.title}
-                className="w-full h-auto"
-              />
-            </div>
-          )}
-
           {blog.seo_tags && blog.seo_tags.length > 0 && (
-            <div className="flex flex-wrap gap-2 mb-8">
+            <div className="flex flex-wrap gap-2 mb-6">
               {blog.seo_tags.map((tag, index) => (
                 <span
                   key={index}
@@ -156,10 +147,19 @@ export default function BlogDetailPage() {
             </div>
           )}
 
-          <article
-            className="prose prose-lg max-w-none bg-white rounded-lg shadow-sm p-8 mb-8"
-            dangerouslySetInnerHTML={{ __html: blog.content }}
-          />
+          <article className="prose prose-lg max-w-none bg-white rounded-lg shadow-sm overflow-hidden mb-8">
+            {blog.featured_image && (
+              <img
+                src={blog.featured_image}
+                alt={blog.title}
+                className="w-full h-auto block"
+              />
+            )}
+            <div
+              className="p-8 [&_img]:max-w-full [&_img]:h-auto"
+              dangerouslySetInnerHTML={{ __html: blog.content }}
+            />
+          </article>
 
           <div className="bg-white rounded-lg shadow-sm p-6 flex items-center justify-between">
             <div>

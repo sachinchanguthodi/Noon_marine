@@ -31,22 +31,39 @@ import {
   Globe,
   ShieldCheck,
   BookOpen,
+  Mail,
+  CreditCard,
+  AlertCircle,
+  RefreshCw,
 } from 'lucide-react';
 
 export default function DashboardPage() {
   const [activeTab, setActiveTab] = useState('overview');
   const [user, setUser] = useState<any>(null);
+  const [sendingVerification, setSendingVerification] = useState(false);
+  const [verificationSent, setVerificationSent] = useState(false);
 
   useEffect(() => {
-    // Get user from localStorage
     const storedUser = localStorage.getItem('user');
     if (storedUser) {
       setUser(JSON.parse(storedUser));
     } else {
-      // Redirect to login if no user
       window.location.href = '/login';
     }
   }, []);
+
+  const handleResendVerification = async () => {
+    setSendingVerification(true);
+    try {
+      const { adminService } = await import('@/lib/api');
+      await adminService.sendVerificationEmail();
+      setVerificationSent(true);
+    } catch (err) {
+      alert('Failed to send verification email. Please try again.');
+    } finally {
+      setSendingVerification(false);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -79,6 +96,34 @@ export default function DashboardPage() {
           </div>
         </div>
       </header>
+
+      {/* Email verification banner */}
+      {user && user.emailVerified === false && (
+        <div className="bg-amber-50 border-b border-amber-200">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex flex-col sm:flex-row items-start sm:items-center gap-3">
+            <div className="flex items-center gap-2 flex-1">
+              <AlertCircle className="h-5 w-5 text-amber-600 flex-shrink-0" />
+              <p className="text-sm text-amber-800">
+                <strong>Please verify your email address</strong> — check your inbox for a verification link.
+              </p>
+            </div>
+            {verificationSent ? (
+              <span className="text-sm text-green-700 font-medium flex items-center gap-1">
+                <CheckCircle className="h-4 w-4" /> Email sent!
+              </span>
+            ) : (
+              <button
+                onClick={handleResendVerification}
+                disabled={sendingVerification}
+                className="flex items-center gap-1.5 text-sm font-medium text-amber-700 hover:text-amber-900 underline disabled:opacity-50 flex-shrink-0"
+              >
+                {sendingVerification && <RefreshCw className="h-4 w-4 animate-spin" />}
+                Resend verification email
+              </button>
+            )}
+          </div>
+        </div>
+      )}
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
@@ -149,6 +194,20 @@ export default function DashboardPage() {
                     >
                       <ShieldCheck className="h-5 w-5" />
                       <span className="font-medium">Admin Panel</span>
+                    </Link>
+                    <Link
+                      href="/admin/users"
+                      className="w-full flex items-center space-x-3 px-4 py-3 rounded-lg bg-gradient-to-r from-purple-600 to-purple-700 text-white hover:from-purple-700 hover:to-purple-800 transition"
+                    >
+                      <Users className="h-5 w-5" />
+                      <span className="font-medium">Users</span>
+                    </Link>
+                    <Link
+                      href="/admin/payments"
+                      className="w-full flex items-center space-x-3 px-4 py-3 rounded-lg bg-gradient-to-r from-green-600 to-green-700 text-white hover:from-green-700 hover:to-green-800 transition"
+                    >
+                      <CreditCard className="h-5 w-5" />
+                      <span className="font-medium">Payment Methods</span>
                     </Link>
                     <Link
                       href="/admin/blogs"

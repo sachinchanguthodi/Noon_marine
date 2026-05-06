@@ -6,9 +6,13 @@ import {
   getMe,
   updateProfile,
   changePassword,
+  sendEmailVerification,
+  verifyEmail,
+  getUsers,
 } from '../controllers/authController';
-import { authenticate } from '../middleware/auth';
+import { authenticate, authorize } from '../middleware/auth';
 import { validate } from '../middleware/validation';
+import { UserRole } from '@prisma/client';
 
 const router = Router();
 
@@ -168,5 +172,9 @@ router.put(
   ]),
   changePassword
 );
+
+router.post('/send-verification', authenticate, sendEmailVerification);
+router.get('/verify-email', verifyEmail);
+router.get('/admin/users', authenticate, authorize(UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.MANAGER), getUsers);
 
 export default router;

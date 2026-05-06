@@ -97,6 +97,12 @@ export const vesselsService = {
   delete: (id: string) => api.delete(`/vessels/${id}`),
 };
 
+export const adminService = {
+  getUsers: () => api.get('/auth/admin/users'),
+  sendVerificationEmail: () => api.post('/auth/send-verification'),
+  verifyEmail: (token: string) => api.get('/auth/verify-email', { params: { token } }),
+};
+
 export const serviceRequestsService = {
   create: (data: any) => api.post('/service-requests', data),
   getAll: (params?: any) => api.get('/service-requests/admin/all', { params }),

@@ -25,8 +25,13 @@ import {
   Send,
   User,
   MessageSquare,
+  Copy,
+  Check,
+  Bitcoin,
+  Building2,
+  CreditCard,
 } from 'lucide-react';
-import { MarketplaceListing } from '@/lib/supabase';
+import { MarketplaceListing, PaymentMethod } from '@/lib/supabase';
 
 const categories = [
   { value: 'VESSEL', label: 'Vessels', icon: Ship },
@@ -57,6 +62,8 @@ export default function ListingDetailPage() {
   const [loading, setLoading] = useState(true);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [paymentMethods, setPaymentMethods] = useState<PaymentMethod[]>([]);
+  const [copiedAddress, setCopiedAddress] = useState<string | null>(null);
   const [inquiryForm, setInquiryForm] = useState({
     name: '',
     email: '',
@@ -69,8 +76,29 @@ export default function ListingDetailPage() {
   useEffect(() => {
     if (params.slug) {
       fetchListing(params.slug as string);
+      fetchPaymentMethods();
     }
   }, [params.slug]);
+
+  const fetchPaymentMethods = async () => {
+    try {
+      const { paymentService } = await import('@/lib/paymentService');
+      const data = await paymentService.getActive();
+      setPaymentMethods(data);
+    } catch (err) {
+      console.error('Failed to load payment methods:', err);
+    }
+  };
+
+  const copyToClipboard = async (text: string, id: string) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopiedAddress(id);
+      setTimeout(() => setCopiedAddress(null), 2000);
+    } catch {
+      alert('Copied: ' + text);
+    }
+  };
 
   const fetchListing = async (slug: string) => {
     try {
@@ -444,6 +472,94 @@ export default function ListingDetailPage() {
                 </form>
               )}
             </div>
+
+            {/* Payment Methods */}
+            {paymentMethods.length > 0 && (
+              <div className="border border-gray-200 rounded-xl overflow-hidden">
+                <div className="bg-gray-50 px-5 py-3 border-b border-gray-200 flex items-center gap-2">
+                  <CreditCard className="h-5 w-5 text-gray-600" />
+                  <h2 className="font-semibold text-gray-900">Payment Options</h2>
+                  <span className="ml-auto text-xs text-gray-500">After purchase approval</span>
+                </div>
+
+                <div className="divide-y divide-gray-100">
+                  {paymentMethods.map(method => (
+                    <div key={method.id} className="p-5">
+                      <div className="flex items-center gap-2 mb-3">
+                        {method.type === 'CRYPTO' ? (
+                          <Bitcoin className="h-5 w-5 text-orange-500" />
+                        ) : (
+                          <Building2 className="h-5 w-5 text-blue-500" />
+                        )}
+                        <span className="font-semibold text-gray-900">{method.name}</span>
+                        {method.network && (
+                          <span className="text-xs bg-orange-100 text-orange-700 px-2 py-0.5 rounded-full">
+                            {method.network}
+                          </span>
+                        )}
+                      </div>
+
+                      {method.type === 'CRYPTO' && method.wallet_address && (
+                        <div className="flex flex-col sm:flex-row gap-4 items-start">
+                          {method.qr_code_url && (
+                            <img
+                              src={method.qr_code_url}
+                              alt={`${method.name} QR Code`}
+                              className="w-28 h-28 rounded-lg border border-gray-200 object-contain bg-white flex-shrink-0"
+                            />
+                          )}
+                          <div className="flex-1 min-w-0">
+                            <p className="text-xs text-gray-500 mb-1">Wallet Address:</p>
+                            <div className="flex items-center gap-2">
+                              <code className="flex-1 text-xs bg-gray-100 px-3 py-2 rounded border border-gray-200 break-all text-gray-800">
+                                {method.wallet_address}
+                              </code>
+                              <button
+                                onClick={() => copyToClipboard(method.wallet_address!, method.id)}
+                                className="flex-shrink-0 p-2 text-gray-500 hover:text-primary-600 hover:bg-primary-50 rounded-lg transition"
+                                title="Copy address"
+                              >
+                                {copiedAddress === method.id ? (
+                                  <Check className="h-4 w-4 text-green-500" />
+                                ) : (
+                                  <Copy className="h-4 w-4" />
+                                )}
+                              </button>
+                            </div>
+                            <p className="text-xs text-amber-600 mt-2 font-medium">
+                              Only send {method.name} on the {method.network || 'correct'} network to this address.
+                            </p>
+                          </div>
+                        </div>
+                      )}
+
+                      {method.type === 'BANK' && (
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm">
+                          {method.bank_name && <p className="text-gray-600">Bank: <span className="text-gray-900 font-medium">{method.bank_name}</span></p>}
+                          {method.account_name && <p className="text-gray-600">Account: <span className="text-gray-900 font-medium">{method.account_name}</span></p>}
+                          {method.account_number && <p className="text-gray-600">Acc. No.: <span className="text-gray-900 font-medium">{method.account_number}</span></p>}
+                          {method.iban && (
+                            <p className="text-gray-600 flex items-center gap-1">
+                              IBAN: <span className="text-gray-900 font-medium font-mono">{method.iban}</span>
+                              <button onClick={() => copyToClipboard(method.iban!, method.id + 'iban')} className="text-gray-400 hover:text-primary-600 ml-1">
+                                {copiedAddress === method.id + 'iban' ? <Check className="h-3.5 w-3.5 text-green-500" /> : <Copy className="h-3.5 w-3.5" />}
+                              </button>
+                            </p>
+                          )}
+                          {method.swift_code && <p className="text-gray-600">SWIFT: <span className="text-gray-900 font-medium">{method.swift_code}</span></p>}
+                          {method.routing_number && <p className="text-gray-600">Routing: <span className="text-gray-900 font-medium">{method.routing_number}</span></p>}
+                          {method.bank_country && <p className="text-gray-600">Country: <span className="text-gray-900 font-medium">{method.bank_country}</span></p>}
+                          {method.bank_currency && <p className="text-gray-600">Currency: <span className="text-gray-900 font-medium">{method.bank_currency}</span></p>}
+                          {method.additional_info && (
+                            <p className="col-span-2 text-xs text-gray-500 bg-gray-50 rounded p-2 mt-1">{method.additional_info}</p>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
 
             {/* Share Buttons */}
             <div className="flex items-center space-x-4 pt-4 border-t">

@@ -24,6 +24,30 @@ export type BlogPost = {
   updated_at: string;
 };
 
+export type PaymentMethod = {
+  id: string;
+  type: 'CRYPTO' | 'BANK';
+  name: string;
+  is_active: boolean;
+  sort_order: number;
+  // Crypto
+  network?: string;
+  wallet_address?: string;
+  qr_code_url?: string;
+  // Bank
+  bank_name?: string;
+  account_name?: string;
+  account_number?: string;
+  iban?: string;
+  swift_code?: string;
+  routing_number?: string;
+  bank_country?: string;
+  bank_currency?: string;
+  additional_info?: string;
+  created_at: string;
+  updated_at: string;
+};
+
 export type MarketplaceListing = {
   id: string;
   title: string;

@@ -1,11 +1,13 @@
 import { Request, Response } from 'express';
 import { UserRole, UserStatus } from '@prisma/client';
+import jwt from 'jsonwebtoken';
 import prisma from '../config/database';
 import { hashPassword, comparePassword } from '../utils/password';
 import { generateToken } from '../utils/jwt';
 import { sendSuccess, sendError } from '../utils/response';
 import { AppError } from '../middleware/errorHandler';
 import env from '../config/env';
+import { sendVerificationEmail } from '../services/emailService';
 
 /**
  * @desc    Register new user
@@ -64,13 +66,21 @@ export const register = async (req: Request, res: Response) => {
       role: user.role,
     });
 
+    // Send verification email (non-blocking)
+    const verificationToken = require('jsonwebtoken').sign(
+      { id: user.id, email: user.email, purpose: 'email_verification' },
+      env.JWT_SECRET,
+      { expiresIn: '24h' }
+    );
+    sendVerificationEmail(user.email, user.firstName, verificationToken).catch(console.error);
+
     sendSuccess(
       res,
       {
         user,
         token,
       },
-      'Registration successful',
+      'Registration successful. Please check your email to verify your account.',
       201
     );
   } catch (error: any) {
@@ -216,6 +226,100 @@ export const updateProfile = async (req: Request, res: Response) => {
   } catch (error: any) {
     console.error('Update profile error:', error);
     sendError(res, 'Failed to update profile', 500);
+  }
+};
+
+/**
+ * @desc    Send email verification
+ * @route   POST /api/auth/send-verification
+ * @access  Private
+ */
+export const sendEmailVerification = async (req: Request, res: Response) => {
+  try {
+    if (!req.user) return sendError(res, 'Not authenticated', 401);
+
+    const user = await prisma.user.findUnique({ where: { id: req.user.id } });
+    if (!user) return sendError(res, 'User not found', 404);
+    if (user.emailVerified) return sendError(res, 'Email already verified', 400);
+
+    const token = jwt.sign(
+      { id: user.id, email: user.email, purpose: 'email_verification' },
+      env.JWT_SECRET,
+      { expiresIn: '24h' }
+    );
+
+    const sent = await sendVerificationEmail(user.email, user.firstName, token);
+
+    if (sent) {
+      return sendSuccess(res, null, 'Verification email sent');
+    }
+    // If email not configured, return the token so it still works in dev
+    sendSuccess(res, { token }, 'Email service not configured — use this token directly');
+  } catch (error) {
+    console.error('Send verification error:', error);
+    sendError(res, 'Failed to send verification email', 500);
+  }
+};
+
+/**
+ * @desc    Verify email address
+ * @route   GET /api/auth/verify-email?token=...
+ * @access  Public
+ */
+export const verifyEmail = async (req: Request, res: Response) => {
+  try {
+    const { token } = req.query;
+    if (!token || typeof token !== 'string') return sendError(res, 'Token is required', 400);
+
+    let decoded: any;
+    try {
+      decoded = jwt.verify(token, env.JWT_SECRET);
+    } catch {
+      return sendError(res, 'Invalid or expired verification link', 400);
+    }
+
+    if (decoded.purpose !== 'email_verification') {
+      return sendError(res, 'Invalid token type', 400);
+    }
+
+    await prisma.user.update({
+      where: { id: decoded.id },
+      data: { emailVerified: true },
+    });
+
+    sendSuccess(res, null, 'Email verified successfully');
+  } catch (error) {
+    console.error('Verify email error:', error);
+    sendError(res, 'Email verification failed', 500);
+  }
+};
+
+/**
+ * @desc    Get all users (admin only)
+ * @route   GET /api/admin/users
+ * @access  Private (Admin/Manager)
+ */
+export const getUsers = async (req: Request, res: Response) => {
+  try {
+    const users = await prisma.user.findMany({
+      select: {
+        id: true,
+        email: true,
+        firstName: true,
+        lastName: true,
+        phone: true,
+        role: true,
+        status: true,
+        emailVerified: true,
+        createdAt: true,
+        lastLogin: true,
+      },
+      orderBy: { createdAt: 'desc' },
+    });
+    sendSuccess(res, { users });
+  } catch (error) {
+    console.error('Get users error:', error);
+    sendError(res, 'Failed to fetch users', 500);
   }
 };
 
