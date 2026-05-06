@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { UserRole, UserStatus } from '@prisma/client';
-import jwt from 'jsonwebtoken';
+import * as jwt from 'jsonwebtoken';
 import prisma from '../config/database';
 import { hashPassword, comparePassword } from '../utils/password';
 import { generateToken } from '../utils/jwt';
@@ -66,13 +66,19 @@ export const register = async (req: Request, res: Response) => {
       role: user.role,
     });
 
-    // Send verification email (non-blocking)
-    const verificationToken = require('jsonwebtoken').sign(
-      { id: user.id, email: user.email, purpose: 'email_verification' },
-      env.JWT_SECRET,
-      { expiresIn: '24h' }
-    );
-    sendVerificationEmail(user.email, user.firstName, verificationToken).catch(console.error);
+    // Send verification email fully decoupled from response
+    setImmediate(() => {
+      const verificationToken = jwt.sign(
+        { id: user.id, email: user.email, purpose: 'email_verification' },
+        env.JWT_SECRET,
+        { expiresIn: '24h' }
+      );
+      const verificationUrl = `${env.FRONTEND_URL}/verify-email?token=${verificationToken}`;
+      if (env.NODE_ENV === 'development') {
+        console.log(`\n[DEV] Email verification link for ${user.email}:\n${verificationUrl}\n`);
+      }
+      sendVerificationEmail(user.email, user.firstName, verificationToken).catch(console.error);
+    });
 
     sendSuccess(
       res,

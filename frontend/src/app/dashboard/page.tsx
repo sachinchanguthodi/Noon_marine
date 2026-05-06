@@ -35,6 +35,8 @@ import {
   CreditCard,
   AlertCircle,
   RefreshCw,
+  Copy,
+  Check,
 } from 'lucide-react';
 
 export default function DashboardPage() {
@@ -247,13 +249,41 @@ export default function DashboardPage() {
 
 function OverviewTab({ setActiveTab }: { setActiveTab: (tab: string) => void }) {
   const [user, setUser] = useState<any>(null);
+  const [requests, setRequests] = useState<any[]>([]);
+  const [loadingRequests, setLoadingRequests] = useState(true);
 
   useEffect(() => {
     const storedUser = localStorage.getItem('user');
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
-    }
+    if (storedUser) setUser(JSON.parse(storedUser));
+    fetchRequests();
   }, []);
+
+  const fetchRequests = async () => {
+    try {
+      const { serviceRequestsService } = await import('@/lib/api');
+      const response: any = await serviceRequestsService.getMyRequests();
+      setRequests(response.data?.serviceRequests || []);
+    } catch {
+      // silently fail — backend may not be reachable
+    } finally {
+      setLoadingRequests(false);
+    }
+  };
+
+  const stats = {
+    active: requests.filter(r => r.status === 'OPEN' || r.status === 'IN_PROGRESS').length,
+    completed: requests.filter(r => r.status === 'CLOSED').length,
+    pending: requests.filter(r => r.status === 'OPEN').length,
+  };
+
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case 'OPEN': return 'bg-blue-100 text-blue-800';
+      case 'IN_PROGRESS': return 'bg-yellow-100 text-yellow-800';
+      case 'CLOSED': return 'bg-green-100 text-green-800';
+      default: return 'bg-gray-100 text-gray-800';
+    }
+  };
 
   return (
     <div className="space-y-6">
@@ -261,7 +291,7 @@ function OverviewTab({ setActiveTab }: { setActiveTab: (tab: string) => void }) 
         <h1 className="text-3xl font-bold text-gray-900 mb-2">
           Welcome back, {user?.firstName || 'User'}!
         </h1>
-        <p className="text-gray-600">Here's what's happening with your maritime operations today.</p>
+        <p className="text-gray-600">Here's what's happening with your maritime operations.</p>
       </div>
 
       {/* Stats Grid */}
@@ -271,7 +301,9 @@ function OverviewTab({ setActiveTab }: { setActiveTab: (tab: string) => void }) 
             <div className="bg-blue-100 p-3 rounded-lg">
               <ClipboardList className="h-6 w-6 text-blue-600" />
             </div>
-            <span className="text-2xl font-bold text-gray-900">12</span>
+            <span className="text-2xl font-bold text-gray-900">
+              {loadingRequests ? '—' : stats.active}
+            </span>
           </div>
           <div className="text-sm font-medium text-gray-600">Active Requests</div>
         </div>
@@ -281,7 +313,9 @@ function OverviewTab({ setActiveTab }: { setActiveTab: (tab: string) => void }) 
             <div className="bg-green-100 p-3 rounded-lg">
               <CheckCircle className="h-6 w-6 text-green-600" />
             </div>
-            <span className="text-2xl font-bold text-gray-900">45</span>
+            <span className="text-2xl font-bold text-gray-900">
+              {loadingRequests ? '—' : stats.completed}
+            </span>
           </div>
           <div className="text-sm font-medium text-gray-600">Completed Services</div>
         </div>
@@ -291,7 +325,9 @@ function OverviewTab({ setActiveTab }: { setActiveTab: (tab: string) => void }) 
             <div className="bg-orange-100 p-3 rounded-lg">
               <Clock className="h-6 w-6 text-orange-600" />
             </div>
-            <span className="text-2xl font-bold text-gray-900">3</span>
+            <span className="text-2xl font-bold text-gray-900">
+              {loadingRequests ? '—' : stats.pending}
+            </span>
           </div>
           <div className="text-sm font-medium text-gray-600">Pending Approval</div>
         </div>
@@ -300,23 +336,51 @@ function OverviewTab({ setActiveTab }: { setActiveTab: (tab: string) => void }) 
       {/* Recent Activity */}
       <div className="bg-white rounded-xl shadow-sm p-6">
         <h2 className="text-xl font-bold text-gray-900 mb-4">Recent Activity</h2>
-        <div className="space-y-4">
-          {recentActivity.map((activity, index) => (
-            <div key={index} className="flex items-start space-x-4 p-4 hover:bg-gray-50 rounded-lg transition">
-              <div className={`p-2 rounded-lg ${activity.bgColor}`}>
-                <activity.icon className={`h-5 w-5 ${activity.iconColor}`} />
+        {loadingRequests ? (
+          <p className="text-gray-400 text-sm text-center py-6">Loading...</p>
+        ) : requests.length === 0 ? (
+          <div className="text-center py-8">
+            <ClipboardList className="h-12 w-12 text-gray-200 mx-auto mb-3" />
+            <p className="text-gray-500 text-sm">No service requests yet.</p>
+            <button
+              onClick={() => setActiveTab('services')}
+              className="mt-3 text-sm text-primary-600 hover:underline"
+            >
+              Submit your first request
+            </button>
+          </div>
+        ) : (
+          <div className="space-y-3">
+            {requests.slice(0, 5).map((req) => (
+              <div key={req.id} className="flex items-center justify-between p-4 hover:bg-gray-50 rounded-lg transition">
+                <div className="flex items-center gap-3 min-w-0">
+                  <div className="bg-primary-100 p-2 rounded-lg flex-shrink-0">
+                    <FileText className="h-4 w-4 text-primary-600" />
+                  </div>
+                  <div className="min-w-0">
+                    <p className="text-sm font-medium text-gray-900 truncate">
+                      {req.service?.name || 'Service Request'}
+                    </p>
+                    <p className="text-xs text-gray-500">
+                      {new Date(req.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                    </p>
+                  </div>
+                </div>
+                <span className={`flex-shrink-0 px-2.5 py-0.5 text-xs font-semibold rounded-full ${getStatusColor(req.status)}`}>
+                  {req.status.replace('_', ' ')}
+                </span>
               </div>
-              <div className="flex-1">
-                <p className="font-medium text-gray-900">{activity.title}</p>
-                <p className="text-sm text-gray-600">{activity.description}</p>
-                <p className="text-xs text-gray-500 mt-1">{activity.time}</p>
-              </div>
-              <span className={`px-3 py-1 rounded-full text-xs font-medium ${activity.statusColor}`}>
-                {activity.status}
-              </span>
-            </div>
-          ))}
-        </div>
+            ))}
+            {requests.length > 5 && (
+              <button
+                onClick={() => setActiveTab('requests')}
+                className="w-full text-sm text-primary-600 hover:underline pt-2"
+              >
+                View all {requests.length} requests
+              </button>
+            )}
+          </div>
+        )}
       </div>
 
       {/* Quick Actions */}
@@ -529,9 +593,13 @@ function RequestsTab() {
   const [requests, setRequests] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
+  const [paymentMethods, setPaymentMethods] = useState<any[]>([]);
+  const [showPaymentFor, setShowPaymentFor] = useState<string | null>(null);
+  const [copiedId, setCopiedId] = useState<string | null>(null);
 
   useEffect(() => {
     fetchRequests();
+    fetchPaymentMethods();
   }, []);
 
   const fetchRequests = async () => {
@@ -544,6 +612,22 @@ function RequestsTab() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const fetchPaymentMethods = async () => {
+    try {
+      const { paymentService } = await import('@/lib/paymentService');
+      const data = await paymentService.getActive();
+      setPaymentMethods(data);
+    } catch {}
+  };
+
+  const copyToClipboard = async (text: string, id: string) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopiedId(id);
+      setTimeout(() => setCopiedId(null), 2000);
+    } catch { alert('Copied: ' + text); }
   };
 
   const getStatusColor = (status: string) => {
@@ -655,9 +739,75 @@ function RequestsTab() {
                     </span>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                    <button className="text-primary-600 hover:text-primary-900">View Details</button>
+                    {(request.status === 'IN_PROGRESS' || request.status === 'CLOSED') && paymentMethods.length > 0 && (
+                      <button
+                        onClick={() => setShowPaymentFor(showPaymentFor === request.id ? null : request.id)}
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-green-600 text-white text-xs rounded-lg hover:bg-green-700 transition font-semibold"
+                      >
+                        <CreditCard className="h-3.5 w-3.5" />
+                        {showPaymentFor === request.id ? 'Hide Payment' : 'Make Payment'}
+                      </button>
+                    )}
                   </td>
                 </tr>
+                {showPaymentFor === request.id && (
+                  <tr key={request.id + '-payment'}>
+                    <td colSpan={5} className="px-6 pb-5 pt-0">
+                      <div className="border border-green-200 bg-green-50 rounded-xl p-5">
+                        <p className="text-sm font-semibold text-green-900 mb-4 flex items-center gap-2">
+                          <CreditCard className="h-4 w-4" />
+                          Payment Options for: {request.service?.name || 'Service Request'}
+                        </p>
+                        <div className="space-y-4">
+                          {paymentMethods.map((method: any) => (
+                            <div key={method.id} className="bg-white rounded-lg border border-gray-200 p-4">
+                              <p className="font-semibold text-gray-900 text-sm mb-2 flex items-center gap-2">
+                                {method.type === 'CRYPTO' ? '₿' : '🏦'} {method.name}
+                                {method.network && <span className="text-xs bg-orange-100 text-orange-700 px-2 py-0.5 rounded-full">{method.network}</span>}
+                              </p>
+                              {method.type === 'CRYPTO' && method.wallet_address && (
+                                <div className="flex flex-col sm:flex-row gap-3 items-start">
+                                  {method.qr_code_url && (
+                                    <img src={method.qr_code_url} alt="QR" className="w-20 h-20 rounded border border-gray-200 object-contain flex-shrink-0" />
+                                  )}
+                                  <div className="flex-1 min-w-0">
+                                    <p className="text-xs text-gray-500 mb-1">Wallet Address:</p>
+                                    <div className="flex items-center gap-2">
+                                      <code className="text-xs bg-gray-100 px-2 py-1.5 rounded border flex-1 break-all">{method.wallet_address}</code>
+                                      <button onClick={() => copyToClipboard(method.wallet_address, method.id)} className="flex-shrink-0 p-1.5 text-gray-500 hover:text-green-700 rounded transition">
+                                        {copiedId === method.id ? <Check className="h-4 w-4 text-green-600" /> : <Copy className="h-4 w-4" />}
+                                      </button>
+                                    </div>
+                                    <p className="text-xs text-amber-600 mt-1.5 font-medium">Only send {method.name} on the {method.network || 'correct'} network.</p>
+                                  </div>
+                                </div>
+                              )}
+                              {method.type === 'BANK' && (
+                                <div className="grid grid-cols-2 gap-x-6 gap-y-1 text-xs">
+                                  {method.bank_name && <p className="text-gray-500">Bank: <span className="text-gray-800 font-medium">{method.bank_name}</span></p>}
+                                  {method.account_name && <p className="text-gray-500">Account: <span className="text-gray-800 font-medium">{method.account_name}</span></p>}
+                                  {method.iban && (
+                                    <p className="text-gray-500 flex items-center gap-1">
+                                      IBAN: <span className="text-gray-800 font-medium font-mono">{method.iban}</span>
+                                      <button onClick={() => copyToClipboard(method.iban, method.id + 'i')} className="text-gray-400 hover:text-green-700">
+                                        {copiedId === method.id + 'i' ? <Check className="h-3 w-3 text-green-600" /> : <Copy className="h-3 w-3" />}
+                                      </button>
+                                    </p>
+                                  )}
+                                  {method.swift_code && <p className="text-gray-500">SWIFT: <span className="text-gray-800 font-medium">{method.swift_code}</span></p>}
+                                  {method.bank_currency && <p className="text-gray-500">Currency: <span className="text-gray-800 font-medium">{method.bank_currency}</span></p>}
+                                  {method.additional_info && <p className="col-span-2 text-gray-500 mt-1 bg-gray-50 p-2 rounded">{method.additional_info}</p>}
+                                </div>
+                              )}
+                            </div>
+                          ))}
+                        </div>
+                        <p className="text-xs text-gray-500 mt-3">After making payment please email <a href="mailto:info@noonmarine.com" className="text-primary-600 hover:underline">info@noonmarine.com</a> with your transaction reference.</p>
+                      </div>
+                    </td>
+                  </tr>
+                )}
+              </>
               ))}
             </tbody>
           </table>
@@ -723,16 +873,6 @@ function ProfileTab() {
             />
           </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Role</label>
-            <input
-              type="text"
-              defaultValue={user?.role || ''}
-              disabled
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-50 text-gray-500"
-            />
-          </div>
-
           <div className="flex justify-end">
             <button
               type="submit"
@@ -784,38 +924,6 @@ function SettingsTab() {
   );
 }
 
-const recentActivity = [
-  {
-    icon: Flag,
-    title: 'Flag Registration Approved',
-    description: 'Your vessel MV OCEAN STAR has been successfully registered under Liberia flag',
-    time: '2 hours ago',
-    status: 'Completed',
-    statusColor: 'bg-green-100 text-green-800',
-    bgColor: 'bg-green-100',
-    iconColor: 'text-green-600',
-  },
-  {
-    icon: Shield,
-    title: 'Insurance Quote Ready',
-    description: 'Marine insurance quote for MV PACIFIC is ready for review',
-    time: '5 hours ago',
-    status: 'Pending',
-    statusColor: 'bg-yellow-100 text-yellow-800',
-    bgColor: 'bg-yellow-100',
-    iconColor: 'text-yellow-600',
-  },
-  {
-    icon: Users,
-    title: 'Crew Training Scheduled',
-    description: 'STCW training for 5 crew members scheduled for next week',
-    time: '1 day ago',
-    status: 'In Progress',
-    statusColor: 'bg-blue-100 text-blue-800',
-    bgColor: 'bg-blue-100',
-    iconColor: 'text-blue-600',
-  },
-];
 
 const allServices = [
   { icon: Ship, title: 'Vessel Sales & Chartering', description: 'Buy, sell, or charter vessels' },
