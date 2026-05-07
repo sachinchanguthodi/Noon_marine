@@ -197,9 +197,10 @@ export default function AboutPage() {
             </div>
             <div className="relative rounded-2xl overflow-hidden h-64 sm:h-80 bg-gray-100 shadow-lg">
               <img
-                src="https://images.unsplash.com/photo-1547480053-7d174f67b557?auto=format&fit=crop&w=800&q=80"
-                alt="Dubai Maritime City"
+                src="/images/dmc-aerial.webp"
+                alt="Dubai Maritime City aerial view"
                 className="w-full h-full object-cover"
+                loading="lazy"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-slate-900/50 to-transparent flex items-end p-6">
                 <span className="text-white font-semibold text-sm">Dubai Maritime City</span>
