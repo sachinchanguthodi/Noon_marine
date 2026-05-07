@@ -98,7 +98,7 @@ export default function VerifyEmailPage() {
       <header className="bg-gray-900">
         <div className="max-w-4xl mx-auto px-4 py-3 flex items-center">
           <Link href="/">
-            <Image src="/logo.png" alt="Noon Marine" width={110} height={42} className="object-contain" />
+            <Image src="/logo.webp" alt="Noon Marine" width={110} height={42} className="object-contain" />
           </Link>
         </div>
       </header>

@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import Footer from '@/components/Footer';
 import {
   Ship,
   Wrench,
@@ -131,7 +132,7 @@ export default function MarketplacePage() {
         <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2">
           <div className="flex justify-between items-center">
             <Link href="/" className="flex items-center">
-              <Image src="/logo.png" alt="Noon Marine" width={110} height={42} className="object-contain" />
+              <Image src="/logo.webp" alt="Noon Marine" width={110} height={42} className="object-contain" />
             </Link>
 
             <div className="hidden md:flex space-x-8">
@@ -140,6 +141,7 @@ export default function MarketplacePage() {
               <Link href="/logistics" className="text-gray-300 hover:text-white transition">Logistics</Link>
               <Link href="/vessels" className="text-gray-300 hover:text-white transition">Vessels</Link>
               <Link href="/blog" className="text-gray-300 hover:text-white transition">Blog</Link>
+              <Link href="/about" className="text-gray-300 hover:text-white transition">About</Link>
               <Link href="/contact" className="text-gray-300 hover:text-white transition">Contact</Link>
             </div>
 
@@ -168,6 +170,7 @@ export default function MarketplacePage() {
                 <Link href="/logistics" className="text-gray-300 hover:text-white py-2 px-2" onClick={() => setMobileMenuOpen(false)}>Logistics</Link>
                 <Link href="/vessels" className="text-gray-300 hover:text-white py-2 px-2" onClick={() => setMobileMenuOpen(false)}>Vessels</Link>
                 <Link href="/blog" className="text-gray-300 hover:text-white py-2 px-2" onClick={() => setMobileMenuOpen(false)}>Blog</Link>
+                <Link href="/about" className="text-gray-300 hover:text-white py-2 px-2" onClick={() => setMobileMenuOpen(false)}>About</Link>
                 <Link href="/contact" className="text-gray-300 hover:text-white py-2 px-2" onClick={() => setMobileMenuOpen(false)}>Contact</Link>
                 <div className="flex space-x-2 pt-2">
                   <Link href="/login" className="px-4 py-2 text-gray-300 font-medium">Sign In</Link>
@@ -314,6 +317,7 @@ export default function MarketplacePage() {
                         src={listing.images[0]}
                         alt={listing.title}
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                        loading="lazy"
                       />
                     ) : (
                       <div className="w-full h-full flex items-center justify-center">
@@ -364,22 +368,7 @@ export default function MarketplacePage() {
         )}
       </div>
 
-      {/* Footer */}
-      <footer className="bg-gray-900 text-gray-300 py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <div className="flex items-center justify-center mb-4">
-              <Image src="/logo.png" alt="Noon Marine" width={130} height={52} className="object-contain" />
-            </div>
-            <p className="text-sm mb-4">
-              Your trusted partner for comprehensive maritime solutions
-            </p>
-            <p className="text-sm">
-              &copy; {new Date().getFullYear()} Noon Marine Services. All rights reserved.
-            </p>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }

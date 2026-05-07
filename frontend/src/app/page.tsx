@@ -32,8 +32,11 @@ import {
   MapPin,
   Eye,
   Settings,
-  Box
+  Box,
+  Lock,
+  Anchor,
 } from 'lucide-react';
+import Footer from '@/components/Footer';
 
 interface BlogPost {
   id: string;
@@ -90,6 +93,8 @@ export default function HomePage() {
   const [blogsLoading, setBlogsLoading] = useState(true);
   const [recentListings, setRecentListings] = useState<MarketplaceListing[]>([]);
   const [listingsLoading, setListingsLoading] = useState(true);
+  const [leadEmail, setLeadEmail] = useState('');
+  const [leadSubmitted, setLeadSubmitted] = useState(false);
 
   useEffect(() => {
     fetchRecentBlogs();
@@ -106,6 +111,12 @@ export default function HomePage() {
     } finally {
       setBlogsLoading(false);
     }
+  };
+
+  const handleLeadSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setLeadSubmitted(true);
+    setLeadEmail('');
   };
 
   const fetchRecentListings = async () => {
@@ -127,7 +138,7 @@ export default function HomePage() {
         <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2">
           <div className="flex justify-between items-center">
             <Link href="/" className="flex items-center">
-              <Image src="/logo.png" alt="Noon Marine" width={110} height={42} className="object-contain" />
+              <Image src="/logo.webp" alt="Noon Marine" width={110} height={42} className="object-contain" />
             </Link>
 
             {/* Desktop Navigation */}
@@ -140,6 +151,7 @@ export default function HomePage() {
               <Link href="/logistics" className="text-gray-300 hover:text-white transition">Logistics</Link>
               <Link href="/vessels" className="text-gray-300 hover:text-white transition">Vessels</Link>
               <Link href="/blog" className="text-gray-300 hover:text-white transition">Blog</Link>
+              <Link href="/about" className="text-gray-300 hover:text-white transition">About</Link>
               <Link href="/contact" className="text-gray-300 hover:text-white transition">Contact</Link>
             </div>
 
@@ -223,6 +235,13 @@ export default function HomePage() {
                   Blog
                 </Link>
                 <Link
+                  href="/about"
+                  className="text-gray-300 hover:text-white transition py-2 px-2 hover:bg-gray-800 rounded"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  About
+                </Link>
+                <Link
                   href="/contact"
                   className="text-gray-300 hover:text-white transition py-2 px-2 hover:bg-gray-800 rounded"
                   onClick={() => setMobileMenuOpen(false)}
@@ -235,7 +254,56 @@ export default function HomePage() {
         </nav>
       </header>
 
-      {/* Services Overview - At the Very Top */}
+      {/* Hero Section */}
+      <section className="relative text-white overflow-hidden py-20 sm:py-28 bg-slate-900">
+        <div className="absolute inset-0">
+          <img
+            src="/images/hero-port.webp"
+            alt=""
+            className="w-full h-full object-cover object-bottom opacity-80"
+            loading="eager"
+          />
+          <div className="absolute inset-0 bg-blue-950/70" />
+          <div className="absolute inset-0 bg-gradient-to-t from-slate-900/70 via-transparent to-transparent" />
+        </div>
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <div className="inline-flex items-center px-4 py-2 bg-blue-800/50 border border-blue-700/50 rounded-full text-sm font-medium text-blue-200 mb-6">
+            <MapPin className="h-4 w-4 mr-2" />
+            Based in Dubai Maritime City
+          </div>
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
+            Integrated Maritime Services,<br className="hidden sm:block" />
+            <span className="text-blue-300">Delivered from Dubai</span>
+          </h1>
+          <p className="text-lg sm:text-xl text-blue-100 max-w-3xl mx-auto mb-6">
+            Ship Sales. Ship Registration, Insurance and Logistics — All in one platform, with Arabic/Persian/English support and 72-hour response time.
+          </p>
+          <div className="flex flex-wrap justify-center gap-4 sm:gap-6 text-sm text-blue-200 mb-10">
+            <span className="flex items-center gap-1.5"><CheckCircle2 className="h-4 w-4 text-blue-400" /> Vessel Sales &amp; Chartering</span>
+            <span className="flex items-center gap-1.5"><CheckCircle2 className="h-4 w-4 text-blue-400" /> Flag Registration</span>
+            <span className="flex items-center gap-1.5"><CheckCircle2 className="h-4 w-4 text-blue-400" /> Marine Insurance</span>
+            <span className="flex items-center gap-1.5"><CheckCircle2 className="h-4 w-4 text-blue-400" /> 72-Hour Response</span>
+          </div>
+          <div className="flex flex-col sm:flex-row justify-center gap-4">
+            <Link
+              href="/contact"
+              className="inline-flex items-center justify-center bg-white text-blue-900 px-8 py-4 rounded-lg font-bold hover:bg-blue-50 transition shadow-xl text-base"
+            >
+              Get a Free Consultation
+              <ArrowRight className="ml-2 h-5 w-5" />
+            </Link>
+            <Link
+              href="/services"
+              className="inline-flex items-center justify-center border-2 border-white/70 text-white px-8 py-4 rounded-lg font-semibold hover:bg-white/10 transition text-base"
+            >
+              Explore Our Services
+              <ArrowRight className="ml-2 h-5 w-5" />
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Services Overview */}
       <section className="py-8 sm:py-12 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-6 sm:mb-8">
@@ -284,9 +352,35 @@ export default function HomePage() {
               <p className="text-gray-500">Loading listings...</p>
             </div>
           ) : recentListings.length === 0 ? (
-            <div className="text-center py-8">
-              <ShoppingBag className="h-12 w-12 text-gray-300 mx-auto mb-3" />
-              <p className="text-gray-500">No listings available yet. Check back soon!</p>
+            <div className="bg-gradient-to-br from-blue-50 to-slate-50 border border-blue-100 rounded-2xl p-8 sm:p-12 text-center max-w-2xl mx-auto">
+              <ShoppingBag className="h-14 w-14 text-primary-400 mx-auto mb-4" />
+              <h3 className="text-2xl font-bold text-gray-900 mb-2">Marketplace Launching Soon</h3>
+              <p className="text-gray-600 mb-6 max-w-md mx-auto">
+                Our marine marketplace is launching soon. Sign up below to be the first to know when it goes live and get early access.
+              </p>
+              {leadSubmitted ? (
+                <div className="flex items-center justify-center gap-2 text-green-600 font-medium">
+                  <CheckCircle2 className="h-5 w-5" />
+                  Thank you! We&apos;ll notify you when we launch.
+                </div>
+              ) : (
+                <form onSubmit={handleLeadSubmit} className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
+                  <input
+                    type="email"
+                    placeholder="Your email address"
+                    required
+                    value={leadEmail}
+                    onChange={(e) => setLeadEmail(e.target.value)}
+                    className="flex-1 px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary-500 text-gray-900 text-sm"
+                  />
+                  <button
+                    type="submit"
+                    className="px-6 py-3 bg-primary-600 text-white rounded-lg font-semibold hover:bg-primary-700 transition text-sm whitespace-nowrap"
+                  >
+                    Notify Me
+                  </button>
+                </form>
+              )}
             </div>
           ) : (
             <>
@@ -305,6 +399,7 @@ export default function HomePage() {
                             src={listing.images[0]}
                             alt={listing.title}
                             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                            loading="lazy"
                           />
                         ) : (
                           <div className="w-full h-full flex items-center justify-center">
@@ -381,17 +476,17 @@ export default function HomePage() {
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-3 sm:gap-4">
             <Link
-              href="/register"
+              href="/contact"
               className="inline-flex items-center justify-center bg-white text-primary-700 px-6 py-3 sm:px-8 sm:py-4 rounded-lg font-semibold hover:bg-primary-50 transition shadow-xl text-base sm:text-lg"
             >
-              Start Free Account
+              Request a Free Consultation
               <ArrowRight className="ml-2 h-5 w-5" />
             </Link>
             <Link
-              href="/contact"
+              href="/services"
               className="inline-flex items-center justify-center border-2 border-white text-white px-6 py-3 sm:px-8 sm:py-4 rounded-lg font-semibold hover:bg-white hover:text-primary-700 transition text-base sm:text-lg"
             >
-              Contact Us
+              Explore Services
             </Link>
           </div>
         </div>
@@ -433,6 +528,44 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* Trust Signals & Certifications */}
+      <section className="py-14 bg-gray-50 border-y border-gray-100">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-10">
+            <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2">Certifications &amp; Partners</h2>
+            <p className="text-gray-500 text-sm">Working with leading maritime authorities and organizations</p>
+          </div>
+          <div className="flex flex-wrap justify-center items-center gap-6 sm:gap-10 mb-10">
+            {certificationLogos.map((cert) => (
+              <div key={cert.abbr} className="flex flex-col items-center gap-2 group">
+                <div className={`w-28 h-20 sm:w-32 sm:h-24 rounded-xl shadow-md hover:shadow-xl border flex items-center justify-center p-3 group-hover:-translate-y-1 transition-all duration-300 ${
+                  cert.darkBg
+                    ? 'bg-slate-800 border-slate-700'
+                    : 'bg-white border-gray-100'
+                }`}>
+                  <img src={cert.src} alt={cert.label} className="max-w-full max-h-full object-contain" loading="lazy" />
+                </div>
+                <span className="text-xs text-gray-500 font-medium text-center max-w-[120px] leading-tight">{cert.label}</span>
+              </div>
+            ))}
+          </div>
+          <div className="flex flex-wrap justify-center gap-6 text-sm text-gray-500">
+            <span className="flex items-center gap-1.5">
+              <CheckCircle2 className="h-4 w-4 text-green-500" />
+              Official accreditation in progress
+            </span>
+            <span className="flex items-center gap-1.5">
+              <Shield className="h-4 w-4 text-primary-500" />
+              Secure platform
+            </span>
+            <span className="flex items-center gap-1.5">
+              <Lock className="h-4 w-4 text-primary-500" />
+              SSL encrypted
+            </span>
+          </div>
+        </div>
+      </section>
+
       {/* Why Choose Us */}
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -463,6 +596,7 @@ export default function HomePage() {
                 src="https://images.unsplash.com/photo-1540946485063-a40da27545f8?auto=format&fit=crop&w=800&q=80"
                 alt="Vessel operations"
                 className="rounded-2xl shadow-2xl"
+                loading="lazy"
               />
               <div className="absolute -bottom-6 -left-6 bg-white p-6 rounded-xl shadow-xl">
                 <div className="flex items-center space-x-4">
@@ -562,73 +696,23 @@ export default function HomePage() {
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-4">
             <Link
-              href="/register"
+              href="/contact"
               className="inline-flex items-center justify-center bg-white text-primary-600 px-10 py-4 rounded-lg font-semibold hover:bg-primary-50 transition text-lg shadow-xl"
             >
-              Create Free Account
+              Request a Free Consultation
               <ArrowRight className="ml-2 h-5 w-5" />
             </Link>
             <Link
               href="/contact"
               className="inline-flex items-center justify-center border-2 border-white text-white px-10 py-4 rounded-lg font-semibold hover:bg-white hover:text-primary-600 transition text-lg"
             >
-              Contact Sales
+              Book a Platform Trial
             </Link>
           </div>
-          <p className="mt-6 text-primary-200">No credit card required â€¢ Free forever â€¢ Setup in minutes</p>
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="relative bg-gray-900 text-gray-300 pt-32 pb-12 overflow-hidden">
-        {/* Ocean Container */}
-        <div className="ocean">
-          <div className="wave"></div>
-          <div className="wave wave-2"></div>
-        </div>
-
-        {/* Footer Content */}
-        <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-            <div>
-              <div className="flex items-center mb-4">
-                <Image src="/logo.png" alt="Noon Marine" width={130} height={52} className="object-contain" />
-              </div>
-              <p className="text-sm">
-                Your trusted partner for comprehensive maritime solutions across the UAE, GCC, Africa, and Asia.
-              </p>
-            </div>
-            <div>
-              <h4 className="text-white font-semibold mb-4">Services</h4>
-              <ul className="space-y-2 text-sm">
-                <li><Link href="/marketplace" className="hover:text-primary-400 transition">Marketplace</Link></li>
-                <li><Link href="/services" className="hover:text-primary-400 transition">Vessel Sales</Link></li>
-                <li><Link href="/services" className="hover:text-primary-400 transition">Marine Insurance</Link></li>
-                <li><Link href="/services" className="hover:text-primary-400 transition">Flag Registration</Link></li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="text-white font-semibold mb-4">Company</h4>
-              <ul className="space-y-2 text-sm">
-                <li><Link href="/about" className="hover:text-primary-400 transition">About Us</Link></li>
-                <li><Link href="/contact" className="hover:text-primary-400 transition">Contact</Link></li>
-                <li><Link href="/careers" className="hover:text-primary-400 transition">Careers</Link></li>
-                <li><Link href="/news" className="hover:text-primary-400 transition">News</Link></li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="text-white font-semibold mb-4">Contact</h4>
-              <ul className="space-y-2 text-sm">
-                <li>Dubai Maritime City, UAE</li>
-                <li>Email: info@noonmarine.com</li>
-              </ul>
-            </div>
-          </div>
-          <div className="mt-8 pt-8 text-center text-sm">
-            <p>&copy; {new Date().getFullYear()} Noon Marine Services. All rights reserved.</p>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }
@@ -720,3 +804,10 @@ const benefits = [
   },
 ];
 
+const certificationLogos = [
+  { abbr: 'PRS',  label: 'Polish Register of Shipping',    src: '/logos/logo-prs.webp',  darkBg: false },
+  { abbr: 'GAC',  label: 'Gulf Agency Company',            src: '/logos/logo-gac.webp',  darkBg: false },
+  { abbr: 'DMC',  label: 'Dubai Maritime City Authority',  src: '/logos/logo-dmc.webp',  darkBg: true  },
+  { abbr: 'STCW', label: 'STCW Training Partners',         src: '/logos/logo-stcw.webp', darkBg: false },
+  { abbr: 'P&I',  label: 'International Group of P&I Clubs', src: '/logos/logo-pi.webp', darkBg: false },
+];

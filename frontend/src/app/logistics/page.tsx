@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { useState } from 'react';
+import Footer from '@/components/Footer';
 import {
   Ship,
   Package,
@@ -282,13 +283,14 @@ export default function LogisticsPage() {
         <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2">
           <div className="flex justify-between items-center">
             <Link href="/" className="flex items-center">
-              <Image src="/logo.png" alt="Noon Marine" width={110} height={42} className="object-contain" />
+              <Image src="/logo.webp" alt="Noon Marine" width={110} height={42} className="object-contain" />
             </Link>
             <div className="hidden md:flex space-x-8">
               <Link href="/" className="text-gray-300 hover:text-white transition">Home</Link>
               <Link href="/services" className="text-gray-300 hover:text-white transition">Services</Link>
               <Link href="/logistics" className="text-white font-medium">Logistics</Link>
               <Link href="/vessels" className="text-gray-300 hover:text-white transition">Vessels</Link>
+              <Link href="/about" className="text-gray-300 hover:text-white transition">About</Link>
               <Link href="/contact" className="text-gray-300 hover:text-white transition">Contact</Link>
             </div>
             <div className="flex items-center space-x-4">
@@ -585,49 +587,7 @@ export default function LogisticsPage() {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="bg-gray-900 text-gray-300 py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-            <div>
-              <div className="flex items-center mb-4">
-                <Image src="/logo.png" alt="Noon Marine" width={130} height={52} className="object-contain" />
-              </div>
-              <p className="text-sm">
-                Your trusted partner for maritime logistics and shipping solutions.
-              </p>
-            </div>
-            <div>
-              <h4 className="text-white font-semibold mb-4">Logistics Services</h4>
-              <ul className="space-y-2 text-sm">
-                <li><Link href="/logistics" className="hover:text-primary-400 transition">Ocean Freight</Link></li>
-                <li><Link href="/logistics" className="hover:text-primary-400 transition">Container Shipping</Link></li>
-                <li><Link href="/logistics" className="hover:text-primary-400 transition">Break Bulk</Link></li>
-                <li><Link href="/logistics" className="hover:text-primary-400 transition">Door-to-Door</Link></li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="text-white font-semibold mb-4">Company</h4>
-              <ul className="space-y-2 text-sm">
-                <li><Link href="/about" className="hover:text-primary-400 transition">About Us</Link></li>
-                <li><Link href="/contact" className="hover:text-primary-400 transition">Contact</Link></li>
-                <li><Link href="/services" className="hover:text-primary-400 transition">All Services</Link></li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="text-white font-semibold mb-4">Contact</h4>
-              <ul className="space-y-2 text-sm">
-                <li>Dubai Maritime City, UAE</li>
-                <li>Phone: +971 50 100 1882</li>
-                <li>Email: logistics@noonmarine.com</li>
-              </ul>
-            </div>
-          </div>
-          <div className="border-t border-gray-800 mt-8 pt-8 text-center text-sm">
-            <p>&copy; {new Date().getFullYear()} Noon Marine Services. All rights reserved.</p>
-          </div>
-        </div>
-      </footer>
+      <Footer />
 
       {/* Service Modal */}
       {selectedService && (

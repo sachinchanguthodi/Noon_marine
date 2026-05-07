@@ -85,7 +85,7 @@ export default function RegisterPage() {
         <div className="mx-auto w-full max-w-sm lg:w-96">
           <div>
             <Link href="/" className="flex items-center">
-              <Image src="/logo.png" alt="Noon Marine" width={150} height={58} className="object-contain" />
+              <Image src="/logo.webp" alt="Noon Marine" width={150} height={58} className="object-contain" />
             </Link>
             <h2 className="mt-6 text-3xl font-extrabold text-white">
               Create your account

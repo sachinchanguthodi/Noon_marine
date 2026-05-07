@@ -49,7 +49,7 @@ export default function LoginPage() {
     <div className="min-h-screen bg-gray-900 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <Link href="/" className="flex justify-center items-center">
-          <Image src="/logo.png" alt="Noon Marine" width={180} height={70} className="object-contain" />
+          <Image src="/logo.webp" alt="Noon Marine" width={180} height={70} className="object-contain" />
         </Link>
         <h2 className="mt-6 text-center text-3xl font-extrabold text-white">
           Sign in to your account

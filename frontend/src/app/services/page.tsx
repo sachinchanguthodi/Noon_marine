@@ -1,5 +1,13 @@
-﻿import Link from 'next/link';
+﻿import type { Metadata } from 'next';
+import Link from 'next/link';
 import Image from 'next/image';
+import Footer from '@/components/Footer';
+
+export const metadata: Metadata = {
+  title: 'Maritime Services – Vessel Sales, Insurance & Flag Registration | Noon Marine Dubai',
+  description: 'Comprehensive maritime services in Dubai: vessel sales & chartering, flag registration, marine insurance, crew management, STCW training, and logistics. All in one platform.',
+  keywords: 'maritime services Dubai, vessel sales UAE, flag registration Dubai, marine insurance Gulf, STCW training UAE, crew management',
+};
 import {
   Ship,
   Shield,
@@ -30,7 +38,7 @@ export default function ServicesPage() {
         <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2">
           <div className="flex justify-between items-center">
             <Link href="/" className="flex items-center">
-              <Image src="/logo.png" alt="Noon Marine" width={110} height={42} className="object-contain" />
+              <Image src="/logo.webp" alt="Noon Marine" width={110} height={42} className="object-contain" />
             </Link>
             <div className="hidden md:flex space-x-8">
               <Link href="/" className="text-gray-300 hover:text-white">Home</Link>
@@ -222,7 +230,7 @@ export default function ServicesPage() {
                 </div>
                 <div className="flex items-center">
                   <Building2 className="h-6 w-6 mr-3" />
-                  <span className="text-lg">Dubai Maritime City, UAE</span>
+                  <span className="text-lg">Dubai Maritime City (DMC), New Building, Office No. 16, Dubai, UAE</span>
                 </div>
               </div>
             </div>
@@ -263,6 +271,7 @@ export default function ServicesPage() {
           </div>
         </div>
       </section>
+      <Footer />
     </div>
   );
 }

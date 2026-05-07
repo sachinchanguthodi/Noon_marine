@@ -1,7 +1,14 @@
-﻿import Link from 'next/link';
+﻿import type { Metadata } from 'next';
+import Link from 'next/link';
 import Image from 'next/image';
 import { Phone, Mail, MapPin, Clock, Send } from 'lucide-react';
 import Footer from '@/components/Footer';
+
+export const metadata: Metadata = {
+  title: 'Contact Us – Noon Marine | Dubai Maritime City',
+  description: 'Contact Noon Marine for maritime services in Dubai. Get a free consultation for vessel sales, ship registration, marine insurance, and logistics. Based in Dubai Maritime City.',
+  keywords: 'contact Noon Marine, maritime consultation Dubai, ship registration inquiry, marine services UAE',
+};
 
 export default function ContactPage() {
   return (
@@ -11,7 +18,7 @@ export default function ContactPage() {
         <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2">
           <div className="flex justify-between items-center">
             <Link href="/" className="flex items-center">
-              <Image src="/logo.png" alt="Noon Marine" width={110} height={42} className="object-contain" />
+              <Image src="/logo.webp" alt="Noon Marine" width={110} height={42} className="object-contain" />
             </Link>
             <div className="hidden md:flex space-x-8">
               <Link href="/" className="text-gray-300 hover:text-white transition">Home</Link>
@@ -92,7 +99,8 @@ export default function ContactPage() {
                   </div>
                   <div>
                     <h4 className="font-semibold text-gray-900 mb-1">Office</h4>
-                    <p className="text-gray-600">Dubai Maritime City</p>
+                    <p className="text-gray-600">Dubai Maritime City (DMC)</p>
+                    <p className="text-gray-600">New Building, Office No. 16</p>
                     <p className="text-gray-600">Dubai, United Arab Emirates</p>
                   </div>
                 </div>

@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { Outfit, Noto_Sans_Display } from 'next/font/google';
 import './globals.css';
+import WhatsAppButton from '@/components/WhatsAppButton';
 
 const outfit = Outfit({
   subsets: ['latin'],
@@ -16,9 +17,16 @@ const notoSansDisplay = Noto_Sans_Display({
 });
 
 export const metadata: Metadata = {
-  title: 'Noon Marine - Comprehensive Maritime Solutions',
-  description: 'Your one-stop solution for vessel sales, marine insurance, flag registration, crew management, and all maritime services.',
-  keywords: 'marine services, vessel sales, maritime, ship management, UAE, Dubai',
+  title: 'Noon Marine – Integrated Maritime Services, Delivered from Dubai',
+  description: 'Ship Sales, Ship Registration, Marine Insurance, and Logistics — all in one platform. Based in Dubai Maritime City with 72-hour response time. Serving UAE, GCC, and global maritime clients.',
+  keywords: 'ship registration Dubai, STCW training UAE, maritime insurance Gulf, vessel sales Dubai, marine services UAE, flag registration, crew management, Dubai Maritime City',
+  openGraph: {
+    title: 'Noon Marine – Integrated Maritime Services, Delivered from Dubai',
+    description: 'Ship Sales, Ship Registration, Marine Insurance, and Logistics — all in one platform.',
+    url: 'https://noonmarine.com',
+    siteName: 'Noon Marine',
+    type: 'website',
+  },
 };
 
 export default function RootLayout({
@@ -30,6 +38,7 @@ export default function RootLayout({
     <html lang="en" className={`${notoSansDisplay.variable} ${outfit.variable}`}>
       <body className="font-sans antialiased">
         {children}
+        <WhatsAppButton />
       </body>
     </html>
   );

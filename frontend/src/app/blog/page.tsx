@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { blogService } from '@/lib/blogService';
 import { BlogPost } from '@/lib/supabase';
 import { Calendar, Eye, ArrowRight } from 'lucide-react';
+import Footer from '@/components/Footer';
 
 export default function BlogListingPage() {
   const [blogs, setBlogs] = useState<BlogPost[]>([]);
@@ -79,6 +80,7 @@ export default function BlogListingPage() {
                       src={blog.featured_image}
                       alt={blog.title}
                       className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                      loading="lazy"
                     />
                   </div>
                 )}
@@ -133,6 +135,7 @@ export default function BlogListingPage() {
           </div>
         )}
       </div>
+      <Footer />
     </div>
   );
 }
