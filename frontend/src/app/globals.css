@@ -39,15 +39,23 @@
   }
 
   /* ── Google Translate ── */
-  /* Hide the banner bar and all Google branding */
   .goog-te-banner-frame,
+  .goog-te-banner-frame.skiptranslate,
   #goog-gt-tt,
   .goog-te-balloon-frame,
   .goog-te-gadget {
     display: none !important;
+    visibility: hidden !important;
+    height: 0 !important;
   }
 
   body {
+    top: 0 !important;
+    position: static !important;
+  }
+
+  /* Prevent Google from shifting the page down */
+  html body[style*="top:"] {
     top: 0 !important;
   }
 

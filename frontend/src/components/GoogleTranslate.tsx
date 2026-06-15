@@ -43,7 +43,16 @@ export default function GoogleTranslate() {
     script.async = true;
     document.body.appendChild(script);
 
+    // Continuously remove the Google banner bar and fix body offset
+    const removeBanner = setInterval(() => {
+      const banner = document.querySelector<HTMLElement>('.goog-te-banner-frame');
+      if (banner) banner.remove();
+      document.body.style.top = '0px';
+      document.documentElement.style.setProperty('top', '0px', 'important');
+    }, 500);
+
     return () => {
+      clearInterval(removeBanner);
       if (document.body.contains(script)) document.body.removeChild(script);
     };
   }, []);
