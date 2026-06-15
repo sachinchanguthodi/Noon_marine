@@ -36,6 +36,14 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`${notoSansDisplay.variable} ${outfit.variable}`}>
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `window.KriseenaConfig = { workspaceId: "440ed645-c87a-4c95-8cc8-c1a3e7afe126" };`,
+          }}
+        />
+        <script src="https://www.kriseena.com/widget-loader.js" defer />
+      </head>
       <body className="font-sans antialiased">
         {children}
         <WhatsAppButton />
