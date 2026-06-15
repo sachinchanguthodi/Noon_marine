@@ -1,7 +1,6 @@
 import type { Metadata } from 'next';
 import { Outfit, Noto_Sans_Display } from 'next/font/google';
 import './globals.css';
-import WhatsAppButton from '@/components/WhatsAppButton';
 
 const outfit = Outfit({
   subsets: ['latin'],
@@ -46,7 +45,6 @@ export default function RootLayout({
       </head>
       <body className="font-sans antialiased">
         {children}
-        <WhatsAppButton />
       </body>
     </html>
   );
