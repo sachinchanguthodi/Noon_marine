@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { Outfit, Noto_Sans_Display } from 'next/font/google';
 import './globals.css';
+import GoogleTranslate from '@/components/GoogleTranslate';
 
 const outfit = Outfit({
   subsets: ['latin'],
@@ -44,6 +45,7 @@ export default function RootLayout({
         <script src="https://www.kriseena.com/widget-loader.js" defer />
       </head>
       <body className="font-sans antialiased">
+        <GoogleTranslate />
         {children}
       </body>
     </html>
