@@ -43,31 +43,19 @@ export default function GoogleTranslate() {
     script.async = true;
     document.body.appendChild(script);
 
-    // Click the X button inside the Google banner iframe to close it
-    const removeBanner = setInterval(() => {
-      // Try clicking close button inside the banner iframe
-      const iframe = document.querySelector<HTMLIFrameElement>('iframe.goog-te-banner-frame');
-      if (iframe) {
-        try {
-          const closeBtn = iframe.contentDocument?.querySelector<HTMLElement>('a[href="#googtrans(en|en)"], .goog-close-link, img[src*="close"]');
-          if (closeBtn) {
-            closeBtn.click();
-          } else {
-            // Fallback: remove the iframe and reset body position
-            iframe.remove();
-          }
-        } catch {
-          iframe.remove();
-        }
-      }
-      // Always reset body top offset Google sets
-      if (document.body.style.top && document.body.style.top !== '0px') {
+    // MutationObserver: nuke the banner iframe the moment Google injects it
+    const observer = new MutationObserver(() => {
+      const iframe = document.querySelector<HTMLElement>('iframe.goog-te-banner-frame');
+      if (iframe) iframe.remove();
+      if (document.body.style.top !== '' && document.body.style.top !== '0px') {
         document.body.style.top = '0px';
       }
-    }, 300);
+    });
+
+    observer.observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ['style'] });
 
     return () => {
-      clearInterval(removeBanner);
+      observer.disconnect();
       if (document.body.contains(script)) document.body.removeChild(script);
     };
   }, []);
