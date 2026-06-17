@@ -126,21 +126,23 @@ export default function AboutPage() {
               </div>
             </div>
 
-            {/* CEO Placeholder */}
+            {/* CEO */}
             <div className="flex flex-col items-center">
               <div className="w-full max-w-sm bg-gradient-to-br from-blue-50 to-slate-100 border border-blue-100 rounded-2xl p-8 text-center shadow-sm">
-                {/* Replace the initials block below with <img> once the CEO photo is provided */}
-                <div className="w-36 h-36 rounded-full bg-gradient-to-br from-primary-300 to-primary-600 flex items-center justify-center mx-auto mb-5 shadow-lg">
-                  <span className="text-white text-4xl font-bold select-none">SR</span>
+                <div className="w-44 h-44 rounded-full overflow-hidden mx-auto mb-5 shadow-lg border-4 border-white">
+                  <Image
+                    src="/images/sina-rahnama.png"
+                    alt="Sina Rahnama — CEO & Founder, Noon Marine"
+                    width={176}
+                    height={176}
+                    className="w-full h-full object-cover object-top"
+                  />
                 </div>
                 <h3 className="text-xl font-bold text-gray-900 mb-1">Sina Rahnama</h3>
                 <p className="text-primary-600 font-semibold text-sm mb-4">CEO & Founder — Noon Marine</p>
                 <p className="text-gray-600 text-sm leading-relaxed">
                   A young visionary leader with a passion for transforming the maritime industry. As CEO and Founder of Noon Marine, Sina Rahnama is building the region's most comprehensive maritime services hub — connecting vessel owners, seafarers, and maritime businesses across the UAE, GCC, and beyond.
                 </p>
-                <div className="mt-5 pt-4 border-t border-blue-100 text-xs text-gray-400 italic">
-                  CEO photo coming soon
-                </div>
               </div>
             </div>
           </div>
