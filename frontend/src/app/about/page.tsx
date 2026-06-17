@@ -129,13 +129,13 @@ export default function AboutPage() {
             {/* CEO */}
             <div className="flex flex-col items-center">
               <div className="w-full max-w-sm bg-gradient-to-br from-blue-50 to-slate-100 border border-blue-100 rounded-2xl p-8 text-center shadow-sm">
-                <div className="w-44 h-44 rounded-full overflow-hidden mx-auto mb-5 shadow-lg border-4 border-white">
+                <div className="w-56 h-56 rounded-full overflow-hidden mx-auto mb-5 shadow-lg border-4 border-white">
                   <Image
                     src="/images/sina-rahnama.png"
                     alt="Sina Rahnama — CEO & Founder, Noon Marine"
-                    width={176}
-                    height={176}
-                    className="w-full h-full object-cover object-top"
+                    width={224}
+                    height={224}
+                    className="w-full h-full object-cover object-[center_15%]"
                   />
                 </div>
                 <h3 className="text-xl font-bold text-gray-900 mb-1">Sina Rahnama</h3>
