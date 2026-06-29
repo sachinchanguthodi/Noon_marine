@@ -1,112 +1,66 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Ship, Search, MapPin, DollarSign, Calendar, ArrowRight } from 'lucide-react';
+import { Ship, Search, MapPin, Calendar, ArrowRight } from 'lucide-react';
 import Footer from '@/components/Footer';
 
-const vessels = [
-  {
-    name: 'MV OCEAN STAR',
-    type: 'Cargo Ships',
-    typeLabel: 'General Cargo Ship',
-    year: '2018',
-    location: 'Dubai, UAE',
-    dwt: '15,000 MT',
-    price: '12.5M',
-    priceValue: 12500000,
-    priceType: 'For Sale',
-    status: 'For Sale',
-    purpose: 'For Sale',
-    image: 'https://images.unsplash.com/photo-1566487097168-e91a4cafd685?auto=format&fit=crop&w=800&q=80',
-  },
-  {
-    name: 'MV PACIFIC VOYAGER',
-    type: 'Cargo Ships',
-    typeLabel: 'Container Vessel',
-    year: '2020',
-    location: 'Singapore',
-    dwt: '25,000 MT',
-    price: '18M',
-    priceValue: 18000000,
-    priceType: 'For Sale',
-    status: 'For Sale',
-    purpose: 'For Sale',
-    image: 'https://images.unsplash.com/photo-1578575437130-527eed3abbec?auto=format&fit=crop&w=800&q=80',
-  },
-  {
-    name: 'MV ATLANTIC PRIDE',
-    type: 'Tankers',
-    typeLabel: 'Oil Tanker',
-    year: '2019',
-    location: 'Rotterdam',
-    dwt: '35,000 MT',
-    price: '$5,000/day',
-    priceValue: 5000,
-    priceType: 'Per Day',
-    status: 'For Charter',
-    purpose: 'For Charter',
-    image: 'https://images.unsplash.com/photo-1540946485063-a40da27545f8?auto=format&fit=crop&w=800&q=80',
-  },
-  {
-    name: 'LUXURY YACHT ALBA',
-    type: 'Yachts',
-    typeLabel: 'Luxury Yacht',
-    year: '2021',
-    location: 'Monaco',
-    dwt: '500 GT',
-    price: '25M',
-    priceValue: 25000000,
-    priceType: 'For Sale',
-    status: 'For Sale',
-    purpose: 'For Sale',
-    image: 'https://images.unsplash.com/photo-1567899378494-47b22a2ae96a?auto=format&fit=crop&w=800&q=80',
-  },
-  {
-    name: 'MV SUPPLY MASTER',
-    type: 'Supply Vessels',
-    typeLabel: 'Platform Supply Vessel',
-    year: '2017',
-    location: 'Abu Dhabi, UAE',
-    dwt: '3,000 MT',
-    price: '$2,500/day',
-    priceValue: 2500,
-    priceType: 'Per Day',
-    status: 'For Charter',
-    purpose: 'For Charter',
-    image: 'https://images.unsplash.com/photo-1605281317010-fe5ffe798166?auto=format&fit=crop&w=800&q=80',
-  },
-  {
-    name: 'MV ANCHOR POINT',
-    type: 'Tugboats',
-    typeLabel: 'Tugboat',
-    year: '2016',
-    location: 'Jebel Ali, Dubai',
-    dwt: '1,200 MT',
-    price: '4.5M',
-    priceValue: 4500000,
-    priceType: 'For Sale',
-    status: 'For Sale',
-    purpose: 'For Sale',
-    image: 'https://images.unsplash.com/photo-1606925797300-0b35e9d1794e?auto=format&fit=crop&w=800&q=80',
-  },
-];
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+
+const TYPE_LABELS: Record<string, string> = {
+  YACHT: 'Yacht', CARGO: 'Cargo Ship', SUPPLY: 'Supply Vessel',
+  TANKER: 'Tanker', FISHING: 'Fishing Vessel', PASSENGER: 'Passenger Ship',
+  TUGBOAT: 'Tugboat', OTHER: 'Other',
+};
+
+const STATUS_LABELS: Record<string, string> = {
+  AVAILABLE: 'For Sale', CHARTERED: 'For Charter',
+  SOLD: 'Sold', UNDER_MAINTENANCE: 'Under Maintenance', DECOMMISSIONED: 'Decommissioned',
+};
+
+interface Vessel {
+  id: string;
+  name: string;
+  vesselType: string;
+  status: string;
+  flag?: string;
+  yearBuilt?: number;
+  grossTonnage?: number;
+  price?: number;
+  charterRate?: number;
+  description?: string;
+  images: string[];
+}
 
 export default function VesselsPage() {
+  const [vessels, setVessels] = useState<Vessel[]>([]);
+  const [loading, setLoading] = useState(true);
   const [typeFilter, setTypeFilter] = useState('All Types');
   const [purposeFilter, setPurposeFilter] = useState('All');
   const [priceFilter, setPriceFilter] = useState('Any Price');
 
+  useEffect(() => {
+    fetch(`${API_URL}/api/vessels?limit=100`)
+      .then(r => r.json())
+      .then(data => setVessels(data.data || []))
+      .catch(() => setVessels([]))
+      .finally(() => setLoading(false));
+  }, []);
+
   const filtered = vessels.filter((v) => {
-    const typeMatch = typeFilter === 'All Types' || v.type === typeFilter;
-    const purposeMatch = purposeFilter === 'All' || v.purpose === purposeFilter;
+    const typeMatch = typeFilter === 'All Types' || v.vesselType === typeFilter;
+    const purposeMatch =
+      purposeFilter === 'All' ||
+      (purposeFilter === 'For Sale' && v.status === 'AVAILABLE') ||
+      (purposeFilter === 'For Charter' && v.status === 'CHARTERED');
+    const price = v.price || 0;
     const priceMatch =
       priceFilter === 'Any Price' ||
-      (priceFilter === 'Under $1M' && v.priceValue < 1000000) ||
-      (priceFilter === '$1M - $5M' && v.priceValue >= 1000000 && v.priceValue <= 5000000) ||
-      (priceFilter === '$5M - $10M' && v.priceValue > 5000000 && v.priceValue <= 10000000) ||
-      (priceFilter === 'Over $10M' && v.priceValue > 10000000);
+      (priceFilter === 'Under $1M' && price < 1000000) ||
+      (priceFilter === '$1M - $5M' && price >= 1000000 && price <= 5000000) ||
+      (priceFilter === '$5M - $10M' && price > 5000000 && price <= 10000000) ||
+      (priceFilter === 'Over $10M' && price > 10000000);
     return typeMatch && purposeMatch && priceMatch;
   });
 
@@ -211,51 +165,95 @@ export default function VesselsPage() {
       {/* Results */}
       <section className="py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <p className="text-sm text-gray-500 mb-6">{filtered.length} vessel{filtered.length !== 1 ? 's' : ''} found</p>
+          <p className="text-sm text-gray-500 mb-6">
+            {loading ? 'Loading...' : `${filtered.length} vessel${filtered.length !== 1 ? 's' : ''} found`}
+          </p>
 
-          {filtered.length === 0 ? (
+          {loading ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {[...Array(3)].map((_, i) => (
+                <div key={i} className="bg-white rounded-xl shadow-md overflow-hidden animate-pulse">
+                  <div className="aspect-video bg-gray-200" />
+                  <div className="p-6 space-y-3">
+                    <div className="h-5 bg-gray-200 rounded w-3/4" />
+                    <div className="h-4 bg-gray-100 rounded w-1/2" />
+                    <div className="h-4 bg-gray-100 rounded w-2/3" />
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : filtered.length === 0 ? (
             <div className="text-center py-20">
               <Ship className="h-16 w-16 text-gray-300 mx-auto mb-4" />
-              <h3 className="text-xl font-semibold text-gray-700 mb-2">No vessels match your filters</h3>
-              <p className="text-gray-500 mb-6">Try adjusting your search criteria</p>
-              <button
-                onClick={() => { setTypeFilter('All Types'); setPurposeFilter('All'); setPriceFilter('Any Price'); }}
-                className="px-6 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition font-medium"
-              >
-                Clear Filters
-              </button>
+              <h3 className="text-xl font-semibold text-gray-700 mb-2">
+                {vessels.length === 0 ? 'No vessels listed yet' : 'No vessels match your filters'}
+              </h3>
+              <p className="text-gray-500 mb-6">
+                {vessels.length === 0 ? 'Check back soon or contact us directly.' : 'Try adjusting your search criteria'}
+              </p>
+              {vessels.length > 0 && (
+                <button
+                  onClick={() => { setTypeFilter('All Types'); setPurposeFilter('All'); setPriceFilter('Any Price'); }}
+                  className="px-6 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition font-medium"
+                >
+                  Clear Filters
+                </button>
+              )}
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {filtered.map((vessel, index) => (
-                <div key={index} className="bg-white rounded-xl shadow-md hover:shadow-xl transition overflow-hidden">
+              {filtered.map((vessel) => (
+                <div key={vessel.id} className="bg-white rounded-xl shadow-md hover:shadow-xl transition overflow-hidden">
                   <div className="aspect-video relative bg-gray-200">
-                    <img src={vessel.image} alt={vessel.name} className="w-full h-full object-cover" />
-                    <div className={`absolute top-4 right-4 px-3 py-1 rounded-full text-sm font-semibold ${vessel.status === 'For Sale' ? 'bg-blue-100 text-blue-700' : 'bg-green-100 text-green-700'}`}>
-                      {vessel.status}
+                    {vessel.images?.[0] ? (
+                      <img src={vessel.images[0]} alt={vessel.name} className="w-full h-full object-cover" />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center">
+                        <Ship className="h-16 w-16 text-gray-300" />
+                      </div>
+                    )}
+                    <div className={`absolute top-4 right-4 px-3 py-1 rounded-full text-sm font-semibold ${vessel.status === 'AVAILABLE' ? 'bg-blue-100 text-blue-700' : vessel.status === 'CHARTERED' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-600'}`}>
+                      {STATUS_LABELS[vessel.status] || vessel.status}
                     </div>
                   </div>
                   <div className="p-6">
                     <h3 className="text-xl font-bold text-gray-900 mb-1">{vessel.name}</h3>
-                    <p className="text-gray-500 text-sm mb-4">{vessel.typeLabel}</p>
+                    <p className="text-gray-500 text-sm mb-4">{TYPE_LABELS[vessel.vesselType] || vessel.vesselType}</p>
                     <div className="space-y-2 mb-4">
-                      <div className="flex items-center text-sm text-gray-600">
-                        <Calendar className="h-4 w-4 mr-2 text-primary-400" />
-                        <span>Year: {vessel.year}</span>
-                      </div>
-                      <div className="flex items-center text-sm text-gray-600">
-                        <MapPin className="h-4 w-4 mr-2 text-primary-400" />
-                        <span>{vessel.location}</span>
-                      </div>
-                      <div className="flex items-center text-sm text-gray-600">
-                        <Ship className="h-4 w-4 mr-2 text-primary-400" />
-                        <span>DWT: {vessel.dwt}</span>
-                      </div>
+                      {vessel.yearBuilt && (
+                        <div className="flex items-center text-sm text-gray-600">
+                          <Calendar className="h-4 w-4 mr-2 text-primary-400" />
+                          <span>Year: {vessel.yearBuilt}</span>
+                        </div>
+                      )}
+                      {vessel.flag && (
+                        <div className="flex items-center text-sm text-gray-600">
+                          <MapPin className="h-4 w-4 mr-2 text-primary-400" />
+                          <span>{vessel.flag}</span>
+                        </div>
+                      )}
+                      {vessel.grossTonnage && (
+                        <div className="flex items-center text-sm text-gray-600">
+                          <Ship className="h-4 w-4 mr-2 text-primary-400" />
+                          <span>GT: {vessel.grossTonnage.toLocaleString()}</span>
+                        </div>
+                      )}
                     </div>
                     <div className="flex items-center justify-between pt-4 border-t border-gray-200">
                       <div>
-                        <div className="text-2xl font-bold text-primary-600">{vessel.price}</div>
-                        <div className="text-xs text-gray-500">{vessel.priceType}</div>
+                        {vessel.price ? (
+                          <>
+                            <div className="text-2xl font-bold text-primary-600">${vessel.price.toLocaleString()}</div>
+                            <div className="text-xs text-gray-500">For Sale</div>
+                          </>
+                        ) : vessel.charterRate ? (
+                          <>
+                            <div className="text-2xl font-bold text-primary-600">${vessel.charterRate.toLocaleString()}</div>
+                            <div className="text-xs text-gray-500">Per Day</div>
+                          </>
+                        ) : (
+                          <div className="text-sm text-gray-400">Price on request</div>
+                        )}
                       </div>
                       <Link
                         href="/contact"

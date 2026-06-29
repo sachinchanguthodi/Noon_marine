@@ -29,7 +29,6 @@ import {
 import { MarketplaceListing } from '@/lib/supabase';
 
 const categories = [
-  { value: 'VESSEL', label: 'Vessels', icon: Ship },
   { value: 'MACHINERY', label: 'Machinery', icon: Settings },
   { value: 'EQUIPMENT', label: 'Equipment', icon: Wrench },
   { value: 'SPARE_PARTS', label: 'Spare Parts', icon: Package },
