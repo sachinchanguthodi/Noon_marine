@@ -455,6 +455,13 @@ export default function AdminPage() {
               <ShoppingBag className="h-5 w-5 mr-2" />
               Marketplace
             </Link>
+            <Link
+              href="/admin/vessels"
+              className="px-5 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition flex items-center"
+            >
+              <Ship className="h-5 w-5 mr-2" />
+              Vessels
+            </Link>
           </div>
         </div>
       </div>
