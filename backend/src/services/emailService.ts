@@ -26,12 +26,8 @@ const verificationTemplate = (firstName: string, verificationUrl: string): strin
           <!-- Header -->
           <tr>
             <td align="center" style="background:linear-gradient(135deg,#0f172a 0%,#1e3a5f 60%,#1d4ed8 100%);border-radius:16px 16px 0 0;padding:40px 40px 36px;">
-              <div style="display:inline-flex;align-items:center;gap:10px;">
-                <div style="background:rgba(255,255,255,0.15);border-radius:10px;padding:8px 12px;">
-                  <span style="color:#ffffff;font-size:22px;font-weight:800;letter-spacing:1px;">⚓ NOON MARINE</span>
-                </div>
-              </div>
-              <p style="color:rgba(255,255,255,0.65);font-size:13px;margin:12px 0 0;letter-spacing:0.5px;">MARITIME SERVICES PLATFORM</p>
+              <img src="https://noonmarine.com/logo.webp" alt="Noon Marine" width="140" style="display:block;margin:0 auto 10px;height:auto;" />
+              <p style="color:rgba(255,255,255,0.65);font-size:13px;margin:8px 0 0;letter-spacing:0.5px;">MARITIME SERVICES PLATFORM</p>
             </td>
           </tr>
 

@@ -20,8 +20,8 @@ const verificationTemplate = (firstName: string, verificationUrl: string): strin
           <!-- Header -->
           <tr>
             <td align="center" style="background:linear-gradient(135deg,#0f172a 0%,#1e3a5f 60%,#1d4ed8 100%);border-radius:16px 16px 0 0;padding:40px 40px 36px;">
-              <span style="color:#ffffff;font-size:22px;font-weight:800;letter-spacing:1px;">&#9875; NOON MARINE</span>
-              <p style="color:rgba(255,255,255,0.6);font-size:13px;margin:10px 0 0;letter-spacing:0.5px;">MARITIME SERVICES PLATFORM</p>
+              <img src="https://noonmarine.com/logo.webp" alt="Noon Marine" width="140" style="display:block;margin:0 auto 10px;height:auto;" />
+              <p style="color:rgba(255,255,255,0.6);font-size:13px;margin:6px 0 0;letter-spacing:0.5px;">MARITIME SERVICES PLATFORM</p>
             </td>
           </tr>
 
