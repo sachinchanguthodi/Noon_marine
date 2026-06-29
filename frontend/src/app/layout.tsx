@@ -20,6 +20,11 @@ export const metadata: Metadata = {
   title: 'Noon Marine – Integrated Maritime Services, Delivered from Dubai',
   description: 'Ship Sales, Ship Registration, Marine Insurance, and Logistics — all in one platform. Based in Dubai Maritime City with 72-hour response time. Serving UAE, GCC, and global maritime clients.',
   keywords: 'ship registration Dubai, STCW training UAE, maritime insurance Gulf, vessel sales Dubai, marine services UAE, flag registration, crew management, Dubai Maritime City',
+  icons: {
+    icon: '/favicon.png',
+    shortcut: '/favicon.png',
+    apple: '/favicon.png',
+  },
   openGraph: {
     title: 'Noon Marine – Integrated Maritime Services, Delivered from Dubai',
     description: 'Ship Sales, Ship Registration, Marine Insurance, and Logistics — all in one platform.',
