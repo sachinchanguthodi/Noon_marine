@@ -78,6 +78,7 @@ export default function VesselsPage() {
               <Link href="/services" className="text-gray-300 hover:text-white transition">Services</Link>
               <Link href="/logistics" className="text-gray-300 hover:text-white transition">Logistics</Link>
               <Link href="/vessels" className="text-white font-medium">Vessels</Link>
+              <Link href="/marketplace" className="text-gray-300 hover:text-white transition">Parts & Equipment</Link>
               <Link href="/about" className="text-gray-300 hover:text-white transition">About</Link>
               <Link href="/contact" className="text-gray-300 hover:text-white transition">Contact</Link>
             </div>

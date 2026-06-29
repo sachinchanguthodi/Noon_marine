@@ -142,9 +142,9 @@ export default function HomePage() {
 
             {/* Desktop Navigation */}
             <div className="hidden md:flex space-x-8">
-              <Link href="/marketplace" className="text-white font-medium hover:text-primary-400 transition flex items-center">
+              <Link href="/marketplace" className="text-gray-300 hover:text-white transition flex items-center">
                 <ShoppingBag className="h-4 w-4 mr-1" />
-                Marketplace
+                Parts & Equipment
               </Link>
               <Link href="/services" className="text-gray-300 hover:text-white transition">Services</Link>
               <Link href="/logistics" className="text-gray-300 hover:text-white transition">Logistics</Link>
@@ -203,7 +203,7 @@ export default function HomePage() {
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   <ShoppingBag className="h-4 w-4 mr-2" />
-                  Marketplace
+                  Parts & Equipment
                 </Link>
                 <Link
                   href="/services"

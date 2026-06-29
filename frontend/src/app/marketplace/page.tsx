@@ -135,7 +135,7 @@ export default function MarketplacePage() {
             </Link>
 
             <div className="hidden md:flex space-x-8">
-              <Link href="/marketplace" className="text-white font-medium">Marketplace</Link>
+              <Link href="/marketplace" className="text-white font-medium">Parts & Equipment</Link>
               <Link href="/services" className="text-gray-300 hover:text-white transition">Services</Link>
               <Link href="/logistics" className="text-gray-300 hover:text-white transition">Logistics</Link>
               <Link href="/vessels" className="text-gray-300 hover:text-white transition">Vessels</Link>
@@ -164,7 +164,7 @@ export default function MarketplacePage() {
           {mobileMenuOpen && (
             <div className="md:hidden mt-4 pb-4 border-t border-gray-700 pt-4">
               <div className="flex flex-col space-y-3">
-                <Link href="/marketplace" className="text-white font-medium py-2 px-2" onClick={() => setMobileMenuOpen(false)}>Marketplace</Link>
+                <Link href="/marketplace" className="text-white font-medium py-2 px-2" onClick={() => setMobileMenuOpen(false)}>Parts & Equipment</Link>
                 <Link href="/services" className="text-gray-300 hover:text-white py-2 px-2" onClick={() => setMobileMenuOpen(false)}>Services</Link>
                 <Link href="/logistics" className="text-gray-300 hover:text-white py-2 px-2" onClick={() => setMobileMenuOpen(false)}>Logistics</Link>
                 <Link href="/vessels" className="text-gray-300 hover:text-white py-2 px-2" onClick={() => setMobileMenuOpen(false)}>Vessels</Link>

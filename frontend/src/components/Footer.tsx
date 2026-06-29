@@ -62,7 +62,7 @@ export default function Footer() {
           <div>
             <h4 className="text-white font-semibold mb-4">Services</h4>
             <ul className="space-y-2 text-sm">
-              <li><Link href="/marketplace" className="hover:text-primary-400 transition">Marketplace</Link></li>
+              <li><Link href="/marketplace" className="hover:text-primary-400 transition">Parts & Equipment</Link></li>
               <li><Link href="/services" className="hover:text-primary-400 transition">Vessel Sales</Link></li>
               <li><Link href="/services" className="hover:text-primary-400 transition">Marine Insurance</Link></li>
               <li><Link href="/services" className="hover:text-primary-400 transition">Flag Registration</Link></li>
