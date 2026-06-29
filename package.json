@@ -9,7 +9,7 @@
     "start": "cd frontend && npm run start",
     "lint": "cd frontend && npm run lint"
   },
-  "workspaces": [
+  "_workspaces_disabled": [
     "frontend",
     "backend"
   ]
