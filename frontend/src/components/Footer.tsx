@@ -20,7 +20,7 @@ export default function Footer() {
               Your trusted partner for comprehensive maritime solutions across the UAE, GCC, Africa, and Asia.
             </p>
             <a
-              href="https://wa.me/971501001882"
+              href="https://wa.me/971506873131"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-sm font-medium rounded-lg transition"
@@ -92,7 +92,7 @@ export default function Footer() {
               </li>
               <li className="flex items-center">
                 <Phone className="h-4 w-4 mr-2 text-primary-400 flex-shrink-0" />
-                <a href="tel:+971501001882" className="hover:text-primary-400 transition">+971 50 100 1882</a>
+                <a href="tel:+971506873131" className="hover:text-primary-400 transition">+971 50 687 3131</a>
               </li>
               <li className="flex items-center">
                 <Mail className="h-4 w-4 mr-2 text-primary-400 flex-shrink-0" />

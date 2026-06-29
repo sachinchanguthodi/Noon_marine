@@ -94,7 +94,7 @@ export default function PrivacyPolicyPage() {
               <p><strong>NOONMARINE GULF SOLUTIONS FZE</strong></p>
               <p>Dubai Maritime City (DMC), New Building, Office No. 16, Dubai, UAE</p>
               <p>Email: <a href="mailto:info@noonmarine.com" className="text-primary-600 hover:underline">info@noonmarine.com</a></p>
-              <p>Phone: <a href="tel:+971501001882" className="text-primary-600 hover:underline">+971 50 100 1882</a></p>
+              <p>Phone: <a href="tel:+971506873131" className="text-primary-600 hover:underline">+971 50 687 3131</a></p>
             </div>
           </section>
         </div>

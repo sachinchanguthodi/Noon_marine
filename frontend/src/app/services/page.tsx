@@ -222,7 +222,7 @@ export default function ServicesPage() {
               <div className="space-y-3">
                 <div className="flex items-center">
                   <Phone className="h-6 w-6 mr-3" />
-                  <span className="text-lg">+971 50 100 1882</span>
+                  <span className="text-lg">+971 50 687 3131</span>
                 </div>
                 <div className="flex items-center">
                   <Mail className="h-6 w-6 mr-3" />
