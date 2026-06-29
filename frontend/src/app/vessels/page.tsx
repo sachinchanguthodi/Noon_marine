@@ -115,12 +115,15 @@ export default function VesselsPage() {
                   onChange={(e) => setTypeFilter(e.target.value)}
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                 >
-                  <option>All Types</option>
-                  <option>Cargo Ships</option>
-                  <option>Tankers</option>
-                  <option>Supply Vessels</option>
-                  <option>Yachts</option>
-                  <option>Tugboats</option>
+                  <option value="All Types">All Types</option>
+                  <option value="CARGO">Cargo Ships</option>
+                  <option value="TANKER">Tankers</option>
+                  <option value="SUPPLY">Supply Vessels</option>
+                  <option value="YACHT">Yachts</option>
+                  <option value="TUGBOAT">Tugboats</option>
+                  <option value="FISHING">Fishing Vessels</option>
+                  <option value="PASSENGER">Passenger Ships</option>
+                  <option value="OTHER">Other</option>
                 </select>
               </div>
               <div>
