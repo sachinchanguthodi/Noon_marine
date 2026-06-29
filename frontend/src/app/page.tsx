@@ -142,13 +142,10 @@ export default function HomePage() {
 
             {/* Desktop Navigation */}
             <div className="hidden md:flex space-x-8">
-              <Link href="/marketplace" className="text-gray-300 hover:text-white transition flex items-center">
-                <ShoppingBag className="h-4 w-4 mr-1" />
-                Parts & Equipment
-              </Link>
               <Link href="/services" className="text-gray-300 hover:text-white transition">Services</Link>
               <Link href="/logistics" className="text-gray-300 hover:text-white transition">Logistics</Link>
               <Link href="/vessels" className="text-gray-300 hover:text-white transition">Vessels</Link>
+              <Link href="/marketplace" className="text-gray-300 hover:text-white transition">Parts & Equipment</Link>
               <Link href="/blog" className="text-gray-300 hover:text-white transition">Blog</Link>
               <Link href="/about" className="text-gray-300 hover:text-white transition">About</Link>
               <Link href="/contact" className="text-gray-300 hover:text-white transition">Contact</Link>
@@ -198,14 +195,6 @@ export default function HomePage() {
             <div className="md:hidden mt-4 pb-4 border-t border-gray-700 pt-4">
               <div className="flex flex-col space-y-3">
                 <Link
-                  href="/marketplace"
-                  className="text-white font-medium transition py-2 px-2 hover:bg-gray-800 rounded flex items-center"
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  <ShoppingBag className="h-4 w-4 mr-2" />
-                  Parts & Equipment
-                </Link>
-                <Link
                   href="/services"
                   className="text-gray-300 hover:text-white transition py-2 px-2 hover:bg-gray-800 rounded"
                   onClick={() => setMobileMenuOpen(false)}
@@ -225,6 +214,13 @@ export default function HomePage() {
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   Vessels
+                </Link>
+                <Link
+                  href="/marketplace"
+                  className="text-gray-300 hover:text-white transition py-2 px-2 hover:bg-gray-800 rounded"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  Parts & Equipment
                 </Link>
                 <Link
                   href="/blog"
@@ -340,9 +336,9 @@ export default function HomePage() {
               <ShoppingBag className="h-4 w-4 mr-2" />
               Marine Marketplace
             </div>
-            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-3">Latest Marine Listings</h2>
+            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-3">Latest Parts & Equipment</h2>
             <p className="text-sm sm:text-base text-gray-600 max-w-2xl mx-auto">
-              Explore vessels, machinery, equipment, and spare parts from trusted sellers
+              Browse machinery, equipment, and spare parts from trusted maritime sellers
             </p>
           </div>
 
