@@ -45,6 +45,25 @@ app.use(
   })
 );
 
+// Access kill switch.
+//   SITE_LOCKED=true  -> every route except /health returns 503.
+//   UNLOCK_KEY=<secret> lets the owner through with an "x-unlock-key" header
+//   (or ?unlock=<secret>) for testing. /health stays up so Railway health
+//   checks don't trigger a restart loop.
+app.use((req, res, next) => {
+  if (process.env.SITE_LOCKED !== 'true') return next();
+  if (req.path === '/health') return next();
+
+  const key = process.env.UNLOCK_KEY;
+  const provided = req.header('x-unlock-key') || (req.query.unlock as string | undefined);
+  if (key && provided === key) return next();
+
+  return res.status(503).json({
+    success: false,
+    message: 'Service Unavailable',
+  });
+});
+
 // Rate limiting
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
